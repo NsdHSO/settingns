@@ -34,7 +34,7 @@ function gc
     switch (string lower $input_type)
         case r
             set type refactor; set emoji "👷"
-        case f fi
+        case fi
             set type fix; set emoji "🛠️"
         case d
             set type docs; set emoji "📝"
@@ -46,7 +46,7 @@ function gc
             set type chore; set emoji "🌻"
         case p
             set type perf; set emoji "🚀"
-        case feat
+        case f
             set type feat; set emoji "🎸"
         case test
             set type test; set emoji "🐳"
