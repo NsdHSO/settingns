@@ -36,7 +36,7 @@ function gc
         case R
             set type Refactor
         case f
-            set type fix
+            set type feat
         case F
             set type Fix
         case fi
@@ -86,53 +86,7 @@ function gc
             return 1
     end
 
-    # Define emoji and text markers
-    switch $type
-        case feat
-            set emoji "🎸"
-            set text  "=>"
-        case test
-            set emoji "🐳"
-            set text  "=>"
-        case chore
-            set emoji "🌻"
-            set text  "~>"
-        case fix
-            set emoji "🛠️"
-            set text  "!>"
-        case style
-            set emoji "🎯"
-            set text  "**"
-        case docs
-            set emoji "📝"
-            set text  "##"
-        case refactor
-            set emoji "👷"
-            set text  "<>"
-        case perf
-            set emoji "🚀"
-            set text  "++"
-        case revert
-            set emoji "⏪"
-            set text  "--"
-        case '*'
-            echo "❌ Unknown commit type: $type"
-            return 1
-    end
-
-    # Choose marker based on UTF-8 support
-    if string match -qr 'UTF-8|utf8' -- $LANG
-        set marker $emoji
-    else
-        set marker $text
-    end
-
-    # Check if the message already contains the emoji
-    if string match -q "*$emoji*" -- $message
-        git commit -m "$type: $message"
-    else
-        git commit -m "$type: $marker $message"
-    end
+    git commit -m "$type: $message"
 end
 
 
