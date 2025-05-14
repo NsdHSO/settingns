@@ -34,7 +34,7 @@ function gc
         case r
             set type refactor
         case R
-            # For uppercase R, we keep it as Refactor and will add "with tests" in the hook
+            # For uppercase R, we keep it as Refactor and will add "with tests" in the hoo
             set type Refactor
         case f
             set type feat
