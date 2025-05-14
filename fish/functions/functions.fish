@@ -34,35 +34,35 @@ function gc
         case r
             set type refactor
         case R
-            set type Refactor
+            set type refactor
         case f
             set type feat
         case F
-            set type Fix
+            set type fix
         case fi
             set type fix
         case Fi
-            set type Fix
+            set type fix
         case d
             set type docs
         case D
-            set type Docs
+            set type docs
         case s
             set type style
         case S
-            set type Style
+            set type style
         case t
             set type test
         case T
-            set type Test
+            set type test
         case c
             set type chore
         case C
-            set type Chore
+            set type chore
         case p
             set type perf
         case P
-            set type Perf
+            set type perf
         case feat
             set type feat
         case test
