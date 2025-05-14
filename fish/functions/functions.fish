@@ -127,8 +127,14 @@ function gc
         set marker $text
     end
 
-    git commit -m "$type: $marker $message"
+    # Check if the message already contains the emoji
+    if string match -q "*$emoji*" -- $message
+        git commit -m "$type: $message"
+    else
+        git commit -m "$type: $marker $message"
+    end
 end
+
 
 
 # Directory Navigation
