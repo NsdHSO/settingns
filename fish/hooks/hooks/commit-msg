@@ -17,6 +17,70 @@ EMOJI_MAPPER() {
     esac
 }
 
+# Process commit message
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Extract first line
+FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
+
+# Debug output to a log file
+LOG_FILE="/tmp/commit-hook-debug.log"
+echo "Original message: $FIRST_LINE" > "$LOG_FILE"
+
+# Check if the commit message follows the pattern "type: message" or similar
+if echo "$FIRST_LINE" | grep -iq "^[A-Za-z]\+:[[:space:]]*"; then
+    # Extract type before the colon (case-insensitive)
+    COMMIT_TYPE=$(echo "$FIRST_LINE" | sed -E 's/^([A-Za-z]+):.*/\1/')
+    
+    # Extract remaining message after the colon
+    MESSAGE_PART=$(echo "$FIRST_LINE" | sed -E 's/^[A-Za-z]+:[[:space:]]*(.*)/\1/')
+    
+    # Get matching emoji based on commit type
+    EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
+    
+    # Log debugging info
+    echo "Type: $COMMIT_TYPE" >> "$LOG_FILE"
+    echo "Message: $MESSAGE_PART" >> "$LOG_FILE"
+    echo "Emoji: $EMOJI" >> "$LOG_FILE"
+    
+    # Only process if an emoji was found
+    if [ -n "$EMOJI" ]; then
+        # Preserve original case of commit type
+        # Replace the first line with emoji after the colon
+        NEW_FIRST_LINE="$COMMIT_TYPE: $EMOJI $MESSAGE_PART"
+        REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
+        
+        echo "New first line: $NEW_FIRST_LINE" >> "$LOG_FILE"
+        
+        if [ -n "$REMAINING_LINES" ]; then
+            # Multiple lines in commit message
+            printf "%s\n%s\n" "$NEW_FIRST_LINE" "$REMAINING_LINES" > "$COMMIT_MSG_FILE"
+        else
+            # Single line commit message
+            echo "$NEW_FIRST_LINE" > "$COMMIT_MSG_FILE"
+        fi
+    fi
+fi
+#!/bin/sh
+
+# Emoji mapping
+EMOJI_MAPPER() {
+    local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    case $type in
+        feat*) echo "🎸" ;;
+        fix*) echo "🛠️" ;;
+        docs*) echo "📝" ;;
+        style*) echo "🎨" ;;
+        refactor*|r) echo "👷" ;;
+        test*) echo "🐳" ;;
+        chore*) echo "🌻" ;;
+        perf*) echo "🚀" ;;
+        revert*) echo "⏪" ;;
+        *) echo "" ;;
+    esac
+}
+
 # Normalize commit type (lowercase to proper case)
 NORMALIZE_TYPE() {
     local type="$1"
