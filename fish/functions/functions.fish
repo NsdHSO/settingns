@@ -78,6 +78,10 @@ function gc
             set type docs
         case refactor
             set type refactor
+        case r
+            set type refactor
+        case R
+            set type Refactor
         case perf
             set type perf
         case revert
