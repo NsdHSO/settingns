@@ -51,8 +51,9 @@ NORMALIZED_TYPE=$(NORMALIZE_TYPE "$COMMIT_TYPE")
 EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
 
 # If a valid type and emoji were detected, rewrite message
+# If a valid type and emoji were detected, rewrite message
 if [ -n "$EMOJI" ]; then
-    NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI$MESSAGE_PART"
+    NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI $MESSAGE_PART"
     REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
 
     if [ -n "$REMAINING_LINES" ]; then
