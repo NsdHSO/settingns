@@ -44,7 +44,8 @@ FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
 
 # Try to extract a leading type (with or without colon)
 if echo "$FIRST_LINE" | grep -qE "^[A-Za-z]+\s*[:]?"; then
-    # Extract first word (up to colon or space)
+    # Extract first word (up to colon or space
+    
     COMMIT_TYPE=$(echo "$FIRST_LINE" | sed -E 's/^([A-Za-z]+)[:]?.*/\1/')
     
     MESSAGE_PART=$(echo "$FIRST_LINE" | sed -E 's/^[A-Za-z]+[:]?[\s]*(.*)/\1/')
