@@ -161,7 +161,6 @@ NORMALIZE_TYPE() {
 COMMIT_MSG_FILE=$1
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 
-# Extract commit type from first line
 FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
 
 # Check if the commit message follows the pattern "type: message" or similar
