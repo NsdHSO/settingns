@@ -14,7 +14,6 @@ EMOJI_MAPPER() {
         docs*) echo "📝" ;;
         style*) echo "🎨" ;;
         Refactor*|r) echo "👷" ;;
-        refactor*) echo "👷" ;;
         test*) echo "🐳" ;;
         chore*) echo "🌻" ;;
         perf*) echo "🚀" ;;
