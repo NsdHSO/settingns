@@ -1,36 +1,34 @@
 #!/bin/sh
 
-# Emoji mappin
+# Emoji mapping
 EMOJI_MAPPER() {
     local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     case $type in
         feat*) echo "🎸" ;;
-        fix*) echo "🛠️" ;;
-        docs*) echo "📝" ;;
-        style*) echo "🎨" ;;
+        fix*|f|fi) echo "🛠️" ;;
+        docs*|d) echo "📝" ;;
+        style*|s) echo "🎨" ;;
         refactor*|r) echo "👷" ;;
-        test*) echo "🐳" ;;
-        chore*) echo "🌻" ;;
-        perf*) echo "🚀" ;;
+        test*|t) echo "🐳" ;;
+        chore*|c) echo "🌻" ;;
+        perf*|p) echo "🚀" ;;
         revert*) echo "⏪" ;;
         *) echo "" ;;
     esac
 }
 
-# Normalize commit type (lowercase to proper case)
+# Normalize commit type (to canonical lowercase)
 NORMALIZE_TYPE() {
-    local type="$1"
-    local lowercase=$(echo "$type" | tr '[:upper:]' '[:lower:]')
-    
-    case $lowercase in
+    local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    case $type in
         feat*) echo "feat" ;;
-        fix*) echo "fix" ;;
-        docs*) echo "docs" ;;
-        style*) echo "style" ;;
+        fix*|f|fi) echo "fix" ;;
+        docs*|d) echo "docs" ;;
+        style*|s) echo "style" ;;
         refactor*|r) echo "refactor" ;;
-        test*) echo "test" ;;
-        chore*) echo "chore" ;;
-        perf*) echo "perf" ;;
+        test*|t) echo "test" ;;
+        chore*|c) echo "chore" ;;
+        perf*|p) echo "perf" ;;
         revert*) echo "revert" ;;
         *) echo "$type" ;;
     esac
@@ -39,37 +37,27 @@ NORMALIZE_TYPE() {
 # Process commit message
 COMMIT_MSG_FILE=$1
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
-
 FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
 
-# Try to extract a leading type (with or without colon)
-if echo "$FIRST_LINE" | grep -qE "^[A-Za-z]+\s*[:]?"; then
-    # Extract first word (up to colon or space
-    
-    COMMIT_TYPE=$(echo "$FIRST_LINE" | sed -E 's/^([A-Za-z]+)[:]?.*/\1/')
-    
-    MESSAGE_PART=$(echo "$FIRST_LINE" | sed -E 's/^[A-Za-z]+[:]?[\s]*(.*)/\1/')
-    
+# Extract the first word from the line
+COMMIT_TYPE=$(echo "$FIRST_LINE" | awk '{print $1}')
+MESSAGE_PART=$(echo "$FIRST_LINE" | cut -d' ' -f2-)
 
-    # Get matching emoji based on (lowercase) commit type
-    EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
-    
-    # Normalize the commit type
-    NORMALIZED_TYPE=$(NORMALIZE_TYPE "$COMMIT_TYPE")
-    
-    # Only process if an emoji was found
-    if [ -n "$EMOJI" ]; then
-        # Replace the first line while preserving ticket references
-        # Make sure there's a space after the colon and before the emoji
-        NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI$MESSAGE_PART"
-        REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
-        
-        if [ -n "$REMAINING_LINES" ]; then
-            # Multiple lines in commit message
-            printf "%s\n%s\n" "$NEW_FIRST_LINE" "$REMAINING_LINES" > "$COMMIT_MSG_FILE"
-        else
-            # Single line commit message
-            echo "$NEW_FIRST_LINE" > "$COMMIT_MSG_FILE"
-        fi
+# Handle optional colon after type (like `fix: something`)
+COMMIT_TYPE=$(echo "$COMMIT_TYPE" | sed 's/:$//')
+
+# Normalize type and get emoji
+NORMALIZED_TYPE=$(NORMALIZE_TYPE "$COMMIT_TYPE")
+EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
+
+# If a valid type and emoji were detected, rewrite message
+if [ -n "$EMOJI" ]; then
+    NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI$MESSAGE_PART"
+    REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
+
+    if [ -n "$REMAINING_LINES" ]; then
+        printf "%s\n%s\n" "$NEW_FIRST_LINE" "$REMAINING_LINES" > "$COMMIT_MSG_FILE"
+    else
+        echo "$NEW_FIRST_LINE" > "$COMMIT_MSG_FILE"
     fi
 fi
