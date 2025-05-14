@@ -4,7 +4,7 @@
 LOG_FILE="/tmp/commit-hook-debug.log"
 echo "=== Commit Hook Execution $(date) ===" > "$LOG_FILE"
 
-# Emoji mapping - same emoji mapping for both uppercase and lowercase types
+# Emoji mapping - same emoji mapping for both uppercase and lowercase type
 EMOJI_MAPPER() {
     local type_lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     echo "EMOJI_MAPPER called with: $1 (lowercase: $type_lower)" >> "$LOG_FILE"
