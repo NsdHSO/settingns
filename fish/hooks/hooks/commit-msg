@@ -17,7 +17,7 @@ EMOJI_MAPPER() {
     esac
 }
 
-# Normalize commit type (to canonical lowercase)
+# Normalize commit type to canonical lowercase
 NORMALIZE_TYPE() {
     local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     case $type in
