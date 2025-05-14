@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Debug output to a log file
+# Debug output to a log fil
 LOG_FILE="/tmp/commit-hook-debug.log"
 echo "=== Commit Hook Execution $(date) ===" > "$LOG_FILE"
 
