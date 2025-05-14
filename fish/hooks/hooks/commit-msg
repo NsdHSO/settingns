@@ -1,8 +1,13 @@
 #!/bin/sh
 
+# Debug output to a log file
+LOG_FILE="/tmp/commit-hook-debug.log"
+echo "=== Commit Hook Execution $(date) ===" > "$LOG_FILE"
+
 # Emoji mapping - same emoji mapping for both uppercase and lowercase types
 EMOJI_MAPPER() {
     local type_lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    echo "EMOJI_MAPPER called with: $1 (lowercase: $type_lower)" >> "$LOG_FILE"
     case $type_lower in
         feat*) echo "🎸" ;;
         fix*) echo "🛠️" ;;
@@ -19,14 +24,28 @@ EMOJI_MAPPER() {
 
 # Process commit message
 COMMIT_MSG_FILE=$1
+echo "Processing commit message file: $COMMIT_MSG_FILE" >> "$LOG_FILE"
+
+# Check if file exists
+if [ ! -f "$COMMIT_MSG_FILE" ]; then
+    echo "ERROR: Commit message file does not exist" >> "$LOG_FILE"
+    exit 1
+fi
+
 COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+echo "Raw commit message: '$COMMIT_MSG'" >> "$LOG_FILE"
 
 # Extract first line
 FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
+echo "First line: '$FIRST_LINE'" >> "$LOG_FILE"
 
-# Debug output to a log file
-LOG_FILE="/tmp/commit-hook-debug.log"
-echo "Original message: $FIRST_LINE" > "$LOG_FILE"
+# Pattern match for debugging
+if echo "$FIRST_LINE" | grep -q "^[A-Za-z]\+:[[:space:]]*"; then
+    echo "Pattern MATCHED!" >> "$LOG_FILE"
+else
+    echo "Pattern DID NOT MATCH!" >> "$LOG_FILE"
+    echo "Pattern used: ^[A-Za-z]\\+:[[:space:]]*" >> "$LOG_FILE"
+fi
 
 # Check if the commit message follows the pattern "type: message" or similar
 if echo "$FIRST_LINE" | grep -q "^[A-Za-z]\+:[[:space:]]*"; then
@@ -40,43 +59,65 @@ if echo "$FIRST_LINE" | grep -q "^[A-Za-z]\+:[[:space:]]*"; then
     EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
     
     # Log debugging info
-    echo "Type: $COMMIT_TYPE" >> "$LOG_FILE"
-    echo "Message: $MESSAGE_PART" >> "$LOG_FILE"
-    echo "Emoji: $EMOJI" >> "$LOG_FILE"
+    echo "Type: '$COMMIT_TYPE'" >> "$LOG_FILE"
+    echo "Message: '$MESSAGE_PART'" >> "$LOG_FILE"
+    echo "Emoji: '$EMOJI'" >> "$LOG_FILE"
     
     # Special handling for uppercase "Refactor" - add "with tests"
     if [ "$COMMIT_TYPE" = "Refactor" ]; then
+        echo "Found Refactor type, adding 'with tests'" >> "$LOG_FILE"
+        
         # Extract any ticket reference from the end of the message
-        TICKET_REF=""
-        if echo "$MESSAGE_PART" | grep -q "\[[A-Za-z0-9-]\+\]$"; then
-            TICKET_REF=$(echo "$MESSAGE_PART" | grep -o "\[[A-Za-z0-9-]\+\]$")
-            MESSAGE_WITHOUT_TICKET=$(echo "$MESSAGE_PART" | sed "s/\[[A-Za-z0-9-]\+\]$//")
+        if echo "$MESSAGE_PART" | grep -q "\[[A-Za-z0-9-]\+\]"; then
+            echo "Found ticket reference" >> "$LOG_FILE"
+            TICKET_REF=$(echo "$MESSAGE_PART" | grep -o "\[[A-Za-z0-9-]\+\]")
+            echo "Ticket ref: $TICKET_REF" >> "$LOG_FILE"
+            
+            # Remove the ticket reference from the message
+            MESSAGE_WITHOUT_TICKET=$(echo "$MESSAGE_PART" | sed "s/\[[A-Za-z0-9-]\+\]//g" | sed 's/[[:space:]]*$//')
+            echo "Message without ticket: '$MESSAGE_WITHOUT_TICKET'" >> "$LOG_FILE"
+            
             # Add "with tests" before the ticket reference
             NEW_MESSAGE_PART="$MESSAGE_WITHOUT_TICKET with tests $TICKET_REF"
         else
+            echo "No ticket reference found" >> "$LOG_FILE"
             # No ticket reference, just add "with tests"
             NEW_MESSAGE_PART="$MESSAGE_PART with tests"
         fi
+        echo "New message part: '$NEW_MESSAGE_PART'" >> "$LOG_FILE"
         MESSAGE_PART="$NEW_MESSAGE_PART"
     fi
     
     # Only process if an emoji was found
     if [ -n "$EMOJI" ]; then
+        echo "Emoji found, updating commit message" >> "$LOG_FILE"
+        
         # Replace the first line with emoji after the colon
         NEW_FIRST_LINE="$COMMIT_TYPE: $EMOJI $MESSAGE_PART"
         REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
         
-        echo "New first line: $NEW_FIRST_LINE" >> "$LOG_FILE"
+        echo "New first line: '$NEW_FIRST_LINE'" >> "$LOG_FILE"
         
         if [ -n "$REMAINING_LINES" ]; then
+            echo "Multiple lines detected" >> "$LOG_FILE"
             # Multiple lines in commit message
             printf "%s\n%s\n" "$NEW_FIRST_LINE" "$REMAINING_LINES" > "$COMMIT_MSG_FILE"
         else
+            echo "Single line commit message" >> "$LOG_FILE"
             # Single line commit message
             echo "$NEW_FIRST_LINE" > "$COMMIT_MSG_FILE"
         fi
+        
+        echo "Commit message updated successfully" >> "$LOG_FILE"
+    else
+        echo "No emoji found for type: $COMMIT_TYPE" >> "$LOG_FILE"
     fi
+else
+    echo "Commit message does not match expected format" >> "$LOG_FILE"
 fi
+
+echo "Commit hook completed" >> "$LOG_FILE"
+
 
 #!/bin/sh
 
