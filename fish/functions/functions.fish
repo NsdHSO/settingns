@@ -230,7 +230,7 @@ function yaw
 
     for i in (seq 1 (count $lockfiles))
         if test -f $lockfiles[$i]
-            set manager $managers[$i]  # No `-l`, so it's not scoped locally to the loop
+            set manager $managers[$i]  # No `-l`, so it's not scoped locally to the loo
             set found 1
             break
         end
