@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Emoji mapping
+# Emoji mappin
 EMOJI_MAPPER() {
     local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     case $type in
