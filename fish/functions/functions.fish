@@ -25,6 +25,7 @@ function nxg
             nx g @nx/angular:$type --name=$name --standalone=true
     end
 end
+
 function gc
     set -l input_type $argv[1]
     set -l message "$argv[2..-1]"
@@ -68,15 +69,13 @@ function gc
             return 1
     end
 
-    # Capitalize type if original input was capitalized
+    # Capitalize type if original input was uppercase
     if string match -rq '^[A-Z]' -- $input_type
-        set type (string upper --first $type[1])(string sub -s 2 $type)
+        set type (string upper (string sub -s 1 -l 1 $type))(string sub -s 2 $type)
     end
 
     git commit -m "$type: $emoji $message"
 end
-
-
 
 # Directory Navigation
 function ...;    cd ../..; end
