@@ -26,44 +26,102 @@ function nxg
     end
 end
 function gc
-    set -l type $argv[1]
-    set -l message (string join " " $argv[2..-1])
+    set -l input_type $argv[1]
+    set -l message "$argv[2..-1]"
 
-    # Check for Unicode/emoji support
-    set -l emoji_supported
-    if string match -qr 'UTF-8|utf8' -- $LANG
-        set emoji_supported true
+    # Normalize the input type
+    switch $input_type
+        case r
+            set type refactor
+        case R
+            set type Refactor
+        case f
+            set type fix
+        case F
+            set type Fix
+        case fi
+            set type fix
+        case Fi
+            set type Fix
+        case d
+            set type docs
+        case D
+            set type Docs
+        case s
+            set type style
+        case S
+            set type Style
+        case t
+            set type test
+        case T
+            set type Test
+        case c
+            set type chore
+        case C
+            set type Chore
+        case p
+            set type perf
+        case P
+            set type Perf
+        case feat
+            set type feat
+        case test
+            set type test
+        case chore
+            set type chore
+        case fix
+            set type fix
+        case style
+            set type style
+        case docs
+            set type docs
+        case refactor
+            set type refactor
+        case perf
+            set type perf
+        case revert
+            set type revert
+        case '*'
+            echo "❌ Unknown commit type: $input_type"
+            return 1
     end
 
-    # Define both text and emoji markers
+    # Define emoji and text markers
     switch $type
-        case feat    
+        case feat
             set emoji "🎸"
             set text  "=>"
-        case test    
+        case test
             set emoji "🐳"
             set text  "=>"
-        case chore   
+        case chore
             set emoji "🌻"
             set text  "~>"
-        case fix     
+        case fix
             set emoji "🛠️"
             set text  "!>"
-        case style   
+        case style
             set emoji "🎯"
             set text  "**"
-        case docs    
+        case docs
             set emoji "📝"
             set text  "##"
         case refactor
             set emoji "👷"
             set text  "<>"
-        case '*'     
+        case perf
+            set emoji "🚀"
+            set text  "++"
+        case revert
+            set emoji "⏪"
+            set text  "--"
+        case '*'
+            echo "❌ Unknown commit type: $type"
             return 1
     end
 
-    # Choose marker based on support
-    if set -q emoji_supported
+    # Choose marker based on UTF-8 support
+    if string match -qr 'UTF-8|utf8' -- $LANG
         set marker $emoji
     else
         set marker $text
@@ -71,6 +129,7 @@ function gc
 
     git commit -m "$type: $marker $message"
 end
+
 
 # Directory Navigation
 function ...;    cd ../..; end
