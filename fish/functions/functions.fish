@@ -29,70 +29,53 @@ function gc
     set -l input_type $argv[1]
     set -l message "$argv[2..-1]"
 
-    # Normalize the input type
-    switch $input_type
+    # Normalize type and determine emoji
+    switch (string lower $input_type)
         case r
-            set type refactor
-        case R
-            # For uppercase R, we keep it as Refactor and will add "with tests" in the hoo
-            set type Refactor
-        case f
-            set type feat
-        case F
-            set type fix
-        case fi
-            set type fix
-        case Fi
-            set type fix
+            set type refactor; set emoji "👷"
+        case f fi
+            set type fix; set emoji "🛠️"
         case d
-            set type docs
-        case D
-            set type docs
+            set type docs; set emoji "📝"
         case s
-            set type style
-        case S
-            set type style
+            set type style; set emoji "🎨"
         case t
-            set type test
-        case T
-            set type test
+            set type test; set emoji "🐳"
         case c
-            set type chore
-        case C
-            set type chore
+            set type chore; set emoji "🌻"
         case p
-            set type perf
-        case P
-            set type perf
+            set type perf; set emoji "🚀"
         case feat
-            set type feat
+            set type feat; set emoji "🎸"
         case test
-            set type test
+            set type test; set emoji "🐳"
         case chore
-            set type chore
+            set type chore; set emoji "🌻"
         case fix
-            set type fix
+            set type fix; set emoji "🛠️"
         case style
-            set type style
+            set type style; set emoji "🎨"
         case docs
-            set type docs
-        case refactor
-            set type refactor
-        case r
-            set type refactor
-        case R
-            set type Refactor
+            set type docs; set emoji "📝"
         case perf
-            set type perf
+            set type perf; set emoji "🚀"
+        case refactor
+            set type refactor; set emoji "👷"
         case revert
-            set type revert
+            set type revert; set emoji "⏪"
         case '*'
             echo "❌ Unknown commit type: $input_type"
             return 1
     end
 
-    git commit -m "$type: $message"
+    # Capitalize type if original input was capitalized
+    if string match -rq '^[A-Z]' -- $input_type
+        set type (string upper --first $type[1])(string sub -s 2 $type)
+    end
+
+    git commit -m "$type: $emoji $message"
 end
+
 
 
 # Directory Navigation
