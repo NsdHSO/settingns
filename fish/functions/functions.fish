@@ -202,4 +202,18 @@ function killport
     end
     
     echo "🪐 Operation complete"
+end 
+
+
+function ginit
+    # Check if we're in a directory with .git
+    if test -d .git
+        # Remove existing hooks
+        rm -rf .git/hooks
+        echo "🧹 Removed existing git hooks"
+    end
+    
+    # Run git init
+    git init
+    echo "✅ Git repository initialized without hooks"
 end
