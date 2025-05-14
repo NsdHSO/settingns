@@ -25,7 +25,7 @@ NORMALIZE_TYPE() {
         fix*|f|fi) echo "fix" ;;
         docs*|d) echo "docs" ;;
         style*|s) echo "style" ;;
-        Refactor*) echo "refactor" ;;
+        Refactor*|R) echo "Refactor" ;;
         refactor*|r) echo "refactor" ;;
         test*|t) echo "test" ;;
         chore*|c) echo "chore" ;;
