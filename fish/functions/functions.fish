@@ -30,7 +30,7 @@ function gc
     set -l input_type $argv[1]
     set -l message "$argv[2..-1]"
 
-    # Normalize type and determine emoji
+    # Normalize type and determine emoj
     switch (string lower $input_type)
         case r
             set type refactor; set emoji "👷"
