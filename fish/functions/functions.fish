@@ -34,7 +34,8 @@ function gc
         case r
             set type refactor
         case R
-            set type refactor
+            # For uppercase R, we keep it as Refactor and will add "with tests" in the hook
+            set type Refactor
         case f
             set type feat
         case F
@@ -88,7 +89,6 @@ function gc
 
     git commit -m "$type: $message"
 end
-
 
 
 # Directory Navigation

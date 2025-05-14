@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# Emoji mapping
+# Emoji mapping - same emoji mapping for both uppercase and lowercase types
 EMOJI_MAPPER() {
-    local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    case $type in
+    local type_lower=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    case $type_lower in
         feat*) echo "🎸" ;;
         fix*) echo "🛠️" ;;
         docs*) echo "📝" ;;
@@ -29,8 +29,8 @@ LOG_FILE="/tmp/commit-hook-debug.log"
 echo "Original message: $FIRST_LINE" > "$LOG_FILE"
 
 # Check if the commit message follows the pattern "type: message" or similar
-if echo "$FIRST_LINE" | grep -iq "^[A-Za-z]\+:[[:space:]]*"; then
-    # Extract type before the colon (case-insensitive)
+if echo "$FIRST_LINE" | grep -q "^[A-Za-z]\+:[[:space:]]*"; then
+    # Extract type before the colon (preserving case)
     COMMIT_TYPE=$(echo "$FIRST_LINE" | sed -E 's/^([A-Za-z]+):.*/\1/')
     
     # Extract remaining message after the colon
@@ -44,9 +44,24 @@ if echo "$FIRST_LINE" | grep -iq "^[A-Za-z]\+:[[:space:]]*"; then
     echo "Message: $MESSAGE_PART" >> "$LOG_FILE"
     echo "Emoji: $EMOJI" >> "$LOG_FILE"
     
+    # Special handling for uppercase "Refactor" - add "with tests"
+    if [ "$COMMIT_TYPE" = "Refactor" ]; then
+        # Extract any ticket reference from the end of the message
+        TICKET_REF=""
+        if echo "$MESSAGE_PART" | grep -q "\[[A-Za-z0-9-]\+\]$"; then
+            TICKET_REF=$(echo "$MESSAGE_PART" | grep -o "\[[A-Za-z0-9-]\+\]$")
+            MESSAGE_WITHOUT_TICKET=$(echo "$MESSAGE_PART" | sed "s/\[[A-Za-z0-9-]\+\]$//")
+            # Add "with tests" before the ticket reference
+            NEW_MESSAGE_PART="$MESSAGE_WITHOUT_TICKET with tests $TICKET_REF"
+        else
+            # No ticket reference, just add "with tests"
+            NEW_MESSAGE_PART="$MESSAGE_PART with tests"
+        fi
+        MESSAGE_PART="$NEW_MESSAGE_PART"
+    fi
+    
     # Only process if an emoji was found
     if [ -n "$EMOJI" ]; then
-        # Preserve original case of commit type
         # Replace the first line with emoji after the colon
         NEW_FIRST_LINE="$COMMIT_TYPE: $EMOJI $MESSAGE_PART"
         REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
@@ -62,6 +77,7 @@ if echo "$FIRST_LINE" | grep -iq "^[A-Za-z]\+:[[:space:]]*"; then
         fi
     fi
 fi
+
 #!/bin/sh
 
 # Emoji mapping
