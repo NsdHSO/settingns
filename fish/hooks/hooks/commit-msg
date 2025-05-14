@@ -25,6 +25,7 @@ NORMALIZE_TYPE() {
         fix*|f|fi) echo "fix" ;;
         docs*|d) echo "docs" ;;
         style*|s) echo "style" ;;
+        Refactor*) echo "refactor" ;;
         refactor*|r) echo "refactor" ;;
         test*|t) echo "test" ;;
         chore*|c) echo "chore" ;;
@@ -40,17 +41,18 @@ COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
 FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
 
 # Extract the first word from the line
-COMMIT_TYPE=$(echo "$FIRST_LINE" | awk '{print $1}')
+COMMIT_TYPE=$(echo "$FIRST_LINE" | awk '{print $1}' | sed 's/:$//')
 MESSAGE_PART=$(echo "$FIRST_LINE" | cut -d' ' -f2-)
-
-# Handle optional colon after type (like `fix: something`)
-COMMIT_TYPE=$(echo "$COMMIT_TYPE" | sed 's/:$//')
 
 # Normalize type and get emoji
 NORMALIZED_TYPE=$(NORMALIZE_TYPE "$COMMIT_TYPE")
 EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
 
-# If a valid type and emoji were detected, rewrite message
+# If emoji already present in message, do nothing
+if echo "$MESSAGE_PART" | grep -q "$EMOJI"; then
+    exit 0
+fi
+
 # If a valid type and emoji were detected, rewrite message
 if [ -n "$EMOJI" ]; then
     NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI $MESSAGE_PART"
