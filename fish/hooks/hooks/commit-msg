@@ -4,7 +4,7 @@
 EMOJI_MAPPER() {
     local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     case $type in
-        feat*) echo "🎸" ;;
+        feat*|f) echo "🎸" ;;
         fix*|fi) echo "🛠️" ;;
         docs*|d) echo "📝" ;;
         style*|s) echo "🎨" ;;
