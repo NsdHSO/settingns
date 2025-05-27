@@ -22,7 +22,7 @@ NORMALIZE_TYPE() {
     local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     case $type in
         feat*) echo "feat" ;;
-        fix*|f|fi) echo "fix" ;;
+        fix*|fi) echo "fix" ;;
         docs*|d) echo "docs" ;;
         style*|s) echo "style" ;;
         Refactor*|R) echo "Refactor" ;;
