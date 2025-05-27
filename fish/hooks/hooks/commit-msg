@@ -21,7 +21,7 @@ EMOJI_MAPPER() {
 NORMALIZE_TYPE() {
     local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     case $type in
-        feat*) echo "feat" ;;
+        feat*|f) echo "feat" ;;
         fix*|fi) echo "fix" ;;
         docs*|d) echo "docs" ;;
         style*|s) echo "style" ;;
