@@ -151,17 +151,28 @@ function gio
     set_color -o blue
     echo "🛰️👽 ---->>>>----M<<<<<---- 👽🛰️"
     set_color cyan
-    echo "🔍📡 Scanning the galaxy (fetching)..."
+    echo "🔍📡 Syncing with remote..."
     set_color normal
-    git fetch
-    set_color magenta
-    echo "🧲🌀 Engaging tractor beam (pulling)..."
-    set_color normal
-    git pull
-    set_color green
-    echo "🌈🛸 Sync complete. Universe updated! 🌍✅"
-    set_color -o yellow
-    echo "💥 BOOM 💥 ---->>>>----M<<<<<---- 💥"
+    
+    # Combine fetch and pull into one command
+    set -l output (git pull --ff-only 2>&1)
+    set -l status $status
+    
+    if test $status -eq 0
+        if string match -q "*Already up to date*" "$output"
+            set_color green
+            echo "✨ Already in sync!"
+        else
+            set_color green
+            echo "🌈🛸 Sync complete. Universe updated! 🌍✅"
+        end
+        set_color -o yellow
+        echo "💥 BOOM 💥 ---->>>>----M<<<<<---- 💥"
+    else
+        set_color red
+        echo "❌ Sync failed!"
+        echo $output
+    end
     set_color normal
 end
 
@@ -171,26 +182,31 @@ function gis
     echo "----------------------"
     set_color normal
     
-    # Get branch info
-    set -l branch (git branch --show-current 2>/dev/null)
-    if test $status -eq 0
+    # Get all info in one go to avoid multiple git calls
+    set -l git_status (git status -b --porcelain=v2 2>/dev/null)
+    set -l branch_info (string match -r "# branch.head (.+)" $git_status)[2]
+    set -l upstream_info (string match -r "# branch.ab \\+([0-9]+) -([0-9]+)" $git_status)
+    
+    if test -n "$branch_info"
         set_color -o green
-        echo "🌿 Branch: $branch"
+        echo "🌿 Branch: $branch_info"
         set_color normal
     end
 
-    # Check if branch is up to date
-    git remote update >/dev/null 2>&1
-    set -l upstream_status (git status -uno)
-    if string match -q "*up to date*" $upstream_status
-        set_color cyan
-        echo "✨ Branch is up to date"
-    else if string match -q "*behind*" $upstream_status
-        set_color yellow
-        echo "⚠️ Branch needs pulling"
-    else if string match -q "*ahead*" $upstream_status
-        set_color magenta
-        echo "🚀 Branch needs pushing"
+    # Check upstream status from cached info
+    if test -n "$upstream_info"
+        set -l ahead $upstream_info[2]
+        set -l behind $upstream_info[3]
+        if test $ahead -eq 0 -a $behind -eq 0
+            set_color cyan
+            echo "✨ Branch is up to date"
+        else if test $behind -gt 0
+            set_color yellow
+            echo "⚠️ Branch needs pulling ($behind commits behind)"
+        else if test $ahead -gt 0
+            set_color magenta
+            echo "🚀 Branch needs pushing ($ahead commits ahead)"
+        end
     end
     set_color normal
 
@@ -322,14 +338,8 @@ function gip
     echo "--------------------------------"
     set_color normal
     
-    # Get current branch
-    set -l branch (git branch --show-current 2>/dev/null)
-    set_color cyan
-    echo "📡 Pushing from branch: $branch"
-    set_color normal
-    
-    # Actually do the push
-    set -l push_output (git push 2>&1)
+    # Get current branch and push in one command
+    set -l push_output (git push --porcelain 2>&1)
     set -l push_status $status
     
     # Process the output with colors
