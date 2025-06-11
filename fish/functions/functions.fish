@@ -315,3 +315,66 @@ function ghard
         set_color normal
     end
 end
+
+function gip
+    set_color -o blue
+    echo "🚀 Initiating Git Push Sequence 📤"
+    echo "--------------------------------"
+    set_color normal
+    
+    # Get current branch
+    set -l branch (git branch --show-current 2>/dev/null)
+    set_color cyan
+    echo "📡 Pushing from branch: $branch"
+    set_color normal
+    
+    # Actually do the push
+    set -l push_output (git push 2>&1)
+    set -l push_status $status
+    
+    # Process the output with colors
+    if test $push_status -eq 0
+        if string match -q "*Everything up-to-date*" "$push_output"
+            set_color green
+            echo "✨ Already up-to-date!"
+        else
+            echo $push_output | while read -l line
+                switch "$line"
+                    case "*Enumerating objects*"
+                        set_color yellow
+                        echo "🔍 $line"
+                    case "*Counting objects*"
+                        set_color magenta
+                        echo "🔢 $line"
+                    case "*Compressing objects*"
+                        set_color cyan
+                        echo "🗜️ $line"
+                    case "*Writing objects*"
+                        set_color blue
+                        echo "💾 $line"
+                    case "*remote: Resolving deltas*"
+                        set_color purple
+                        echo "🔄 $line"
+                    case "*To*"
+                        set_color green
+                        echo "🎯 $line"
+                    case "*"
+                        echo "$line"
+                end
+                set_color normal
+            end
+            set_color -o green
+            echo "✅ Push successful!"
+        end
+    else
+        set_color red
+        echo "❌ Push failed!"
+        echo "Error details:"
+        set_color yellow
+        echo $push_output
+    end
+    
+    set_color -o blue
+    echo "--------------------------------"
+    set_color normal
+end
