@@ -1,7 +1,9 @@
 # Nx Generator Shortcuts
 function nxg
     if test (count $argv) -lt 2
+        set_color red
         echo "Usage: nxg <type> <name>"
+        set_color normal
         return 1
     end
 
@@ -17,9 +19,13 @@ function nxg
 
         case component c
             mkdir -p $name && cd $name
+            set_color cyan
             echo "Directory ✋🏿🧑🏿‍🦲🤚🏿🔫👮🏻: $name | 🚥 Changed into directory"
+            set_color normal
             nx g @nx/angular:component --name=$name --standalone=true --nameAndDirectoryFormat=as-provided
+            set_color green
             echo "Component ▄︻デ۪۞━一💥 : $name created"
+            set_color normal
 
         case '*'
             nx g @nx/angular:$type --name=$name --standalone=true
@@ -65,7 +71,9 @@ function gc
         case revert
             set type revert; set emoji "⏪"
         case '*'
+            set_color red
             echo "❌ Unknown commit type: $input_type"
+            set_color normal
             return 1
     end
 
@@ -89,23 +97,33 @@ function ylock
 
     for i in (seq 1 (count $lockfiles))
         if test -f $lockfiles[$i]
+            set_color yellow
             echo "🧹 Removing $lockfiles[$i]..."
+            set_color normal
             rm -f $lockfiles[$i]
+            set_color cyan
             echo "📦 Installing with $managers[$i]..."
+            set_color normal
             command $managers[$i] install
             return
         end
     end
 
+    set_color red
     echo "❌ No lockfile found"
+    set_color normal
     return 1
 end
 
 function yall
+    set_color red
     echo "🔥 Removing node_modules..."
+    set_color normal
     rm -rf node_modules
     ylock
+    set_color green
     echo "🎉 Fresh start complete 💫"
+    set_color normal
 end
 
 function yas
@@ -114,36 +132,52 @@ function yas
 
     for i in (seq 1 (count $lockfiles))
         if test -f $lockfiles[$i]
+            set_color cyan
             echo "🚀 Starting with $managers[$i]..."
+            set_color normal
             command $managers[$i] start
             return
         end
     end
 
+    set_color red
     echo "❌ No lockfile found"
+    set_color normal
     return 1
 end
 
 # Git Operations
 function gio
+    set_color -o blue
     echo "🛰️👽 ---->>>>----M<<<<<---- 👽🛰️"
+    set_color cyan
     echo "🔍📡 Scanning the galaxy (fetching)..."
+    set_color normal
     git fetch
+    set_color magenta
     echo "🧲🌀 Engaging tractor beam (pulling)..."
+    set_color normal
     git pull
+    set_color green
     echo "🌈🛸 Sync complete. Universe updated! 🌍✅"
+    set_color -o yellow
     echo "💥 BOOM 💥 ---->>>>----M<<<<<---- 💥"
+    set_color normal
 end
 
 # Process Management
 function killport
     if test (count $argv) -eq 0
+        set_color red
         echo "🚨 Usage: killport <port>"
+        set_color normal
         return 1
     end
 
     if not string match -qr '^\d+$' -- $argv[1]
+        set_color yellow
         echo "🌪️ Invalid port number!"
+        set_color normal
         return 1
     end
 
@@ -151,24 +185,33 @@ function killport
     set -l pids (lsof -ti :$port | string split " ")
 
     if test -z "$pids"
+        set_color cyan
         echo "🛸 Port $port: No active processes"
+        set_color normal
         return
     end
 
+    set_color -o blue
     echo "🎯 Targeted Port: $port"
     echo "📡 Detected Processes:"
     
     set -l index 1
     for pid in $pids
         set -l app (ps -p $pid -o comm=)
+        set_color magenta
         echo "$index) 💀 PID $pid [APP: $app]"
+        set_color normal
         set index (math $index + 1)
     end
 
+    set_color -o yellow
     read -l -P "🌌 Enter numbers to kill (0 to abort): " choices
+    set_color normal
 
     if test -z "$choices" || string match -qr '^0+$' -- "$choices"
+        set_color cyan
         echo "🛸 Mission aborted"
+        set_color normal
         return
     end
 
@@ -179,15 +222,21 @@ function killport
         end
 
         set -l pid $pids[$choice]
+        set_color red
         echo "🔥 Terminating PID $pid..."
         if kill -9 $pid
+            set_color green
             echo "✅ Success! PID $pid terminated"
         else
+            set_color red
             echo "❌ Failed to kill PID $pid"
         end
+        set_color normal
     end
     
+    set_color -o cyan
     echo "🪐 Operation complete"
+    set_color normal
 end 
 
 
@@ -196,12 +245,16 @@ function ginit
     if test -d .git
         # Remove existing hooks
         rm -rf .git/hooks
+        set_color yellow
         echo "🧹 Removed existing git hooks"
+        set_color normal
     end
     
     # Run git init
     git init
+    set_color green
     echo "✅ Git repository initialized without hooks"
+    set_color normal
 end
 
 function yaw
@@ -238,5 +291,27 @@ function yaw
         case '*'
             echo "⚠️  Unsupported package manager: $manager"
             return 1
+    end
+end
+
+function ghard
+    set_color yellow
+    echo "⚠️  WARNING: This will delete all local changes!"
+    echo "📁 Current directory: "(pwd)
+    set_color normal
+    
+    read -l -P "🔥 Press ENTER to confirm (or type 'n' to cancel): " confirm
+
+    if test -z "$confirm" -o "$confirm" = "y" -o "$confirm" = "yes"
+        set_color red
+        echo "💣 Resetting all changes..."
+        git reset --hard
+        set_color green
+        echo "✨ Reset complete. All changes have been discarded."
+        set_color normal
+    else
+        set_color cyan
+        echo "🛟 Operation cancelled. Your changes are safe."
+        set_color normal
     end
 end

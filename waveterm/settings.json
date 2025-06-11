@@ -1,0 +1,4 @@
+{
+  "ai:preset": "ai@ollama-llama",
+  "autoupdate:channel": "latest"
+}

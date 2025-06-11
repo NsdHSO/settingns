@@ -1,0 +1,20 @@
+{
+  "ai@ollama-llama": {
+    "display:name": "Ollama - Llama2",
+    "display:order": 2,
+    "ai:*": true,
+    "ai:baseurl": "http://localhost:11434/v1",
+    "ai:name": "llama3.2",
+    "ai:model": "llama3.2",
+    "ai:apitoken": "ollama"
+  },
+  "ai@studio-deepsekk": {
+    "display:name": "Studio - deepsekk",
+    "display:order": 2,
+    "ai:*": true,
+    "ai:baseurl": "http://localhost:1234/v1",
+    "ai:name": "meta-llama-3.1-8b-instruct",
+    "ai:model": "meta-llama-3.1-8b-instruct",
+    "ai:apitoken": "lmstudio"
+  }
+}
