@@ -165,6 +165,75 @@ function gio
     set_color normal
 end
 
+function gis
+    set_color -o blue
+    echo "🔍 Git Status Report 📊"
+    echo "----------------------"
+    set_color normal
+    
+    # Get branch info
+    set -l branch (git branch --show-current 2>/dev/null)
+    if test $status -eq 0
+        set_color -o green
+        echo "🌿 Branch: $branch"
+        set_color normal
+    end
+
+    # Check if branch is up to date
+    git remote update >/dev/null 2>&1
+    set -l upstream_status (git status -uno)
+    if string match -q "*up to date*" $upstream_status
+        set_color cyan
+        echo "✨ Branch is up to date"
+    else if string match -q "*behind*" $upstream_status
+        set_color yellow
+        echo "⚠️ Branch needs pulling"
+    else if string match -q "*ahead*" $upstream_status
+        set_color magenta
+        echo "🚀 Branch needs pushing"
+    end
+    set_color normal
+
+    # Get status
+    set -l status (git status --porcelain 2>/dev/null)
+    if test -z "$status"
+        set_color green
+        echo "✅ Working tree clean"
+    else
+        set_color yellow
+        echo "📝 Changes detected:"
+        set_color normal
+        
+        # Modified files
+        git status --porcelain | while read -l line
+            switch (echo $line | string sub -l 2)
+                case "M*"
+                    set_color cyan
+                    echo "  🔄 Modified: "(echo $line | string sub -s 4)
+                case "A*"
+                    set_color green
+                    echo "  ➕ Added: "(echo $line | string sub -s 4)
+                case "D*"
+                    set_color red
+                    echo "  ❌ Deleted: "(echo $line | string sub -s 4)
+                case "R*"
+                    set_color magenta
+                    echo "  ♻️  Renamed: "(echo $line | string sub -s 4)
+                case "??"
+                    set_color yellow
+                    echo "  ❓ Untracked: "(echo $line | string sub -s 4)
+                case "*"
+                    set_color normal
+                    echo "  "(echo $line | string sub -s 4)
+            end
+        end
+    end
+    
+    set_color -o blue
+    echo "----------------------"
+    set_color normal
+end
+
 # Process Management
 function killport
     if test (count $argv) -eq 0
@@ -182,75 +251,6 @@ function killport
     end
 
     set -l port $argv[1]
-    set -l pids (lsof -ti :$port | string split " ")
-
-    if test -z "$pids"
-        set_color cyan
-        echo "🛸 Port $port: No active processes"
-        set_color normal
-        return
-    end
-
-    set_color -o blue
-    echo "🎯 Targeted Port: $port"
-    echo "📡 Detected Processes:"
-    
-    set -l index 1
-    for pid in $pids
-        set -l app (ps -p $pid -o comm=)
-        set_color magenta
-        echo "$index) 💀 PID $pid [APP: $app]"
-        set_color normal
-        set index (math $index + 1)
-    end
-
-    set_color -o yellow
-    read -l -P "🌌 Enter numbers to kill (0 to abort): " choices
-    set_color normal
-
-    if test -z "$choices" || string match -qr '^0+$' -- "$choices"
-        set_color cyan
-        echo "🛸 Mission aborted"
-        set_color normal
-        return
-    end
-
-    for choice in (string split " " -- $choices)
-        if not string match -qr '^\d+$' -- "$choice" || test $choice -ge $index
-            echo "⚠️ Invalid choice: $choice"
-            continue
-        end
-
-        set -l pid $pids[$choice]
-        set_color red
-        echo "🔥 Terminating PID $pid..."
-        if kill -9 $pid
-            set_color green
-            echo "✅ Success! PID $pid terminated"
-        else
-            set_color red
-            echo "❌ Failed to kill PID $pid"
-        end
-        set_color normal
-    end
-    
-    set_color -o cyan
-    echo "🪐 Operation complete"
-    set_color normal
-end 
-
-
-function ginit
-    # Check if we're in a directory with .git
-    if test -d .git
-        # Remove existing hooks
-        rm -rf .git/hooks
-        set_color yellow
-        echo "🧹 Removed existing git hooks"
-        set_color normal
-    end
-    
-    # Run git init
     git init
     set_color green
     echo "✅ Git repository initialized without hooks"
