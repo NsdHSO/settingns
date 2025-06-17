@@ -33,42 +33,37 @@ function nxg
 end
 
 function gc
+    if test (count $argv) -lt 2
+        set_color red
+        echo "❌ Usage: gc <type> <message>"
+        set_color normal
+        return 1
+    end
+
     set -l input_type $argv[1]
     set -l message "$argv[2..-1]"
+    set -l type
+    set -l emoji
 
-    # Normalize type and determine emoj
+    # Direct mapping without redundant cases
     switch (string lower $input_type)
-        case r
+        case "r" "refactor"
             set type refactor; set emoji "👷"
-        case fi
+        case "fi" "fix"
             set type fix; set emoji "🛠️"
-        case d
+        case "d" "docs"
             set type docs; set emoji "📝"
-        case s
+        case "s" "style"
             set type style; set emoji "🎨"
-        case t
+        case "t" "test"
             set type test; set emoji "🐳"
-        case c
+        case "c" "chore"
             set type chore; set emoji "🌻"
-        case p
+        case "p" "perf"
             set type perf; set emoji "🚀"
-        case f
+        case "f" "feat"
             set type feat; set emoji "🎸"
-        case test
-            set type test; set emoji "🐳"
-        case chore
-            set type chore; set emoji "🌻"
-        case fix
-            set type fix; set emoji "🛠️"
-        case style
-            set type style; set emoji "🎨"
-        case docs
-            set type docs; set emoji "📝"
-        case perf
-            set type perf; set emoji "🚀"
-        case refactor
-            set type refactor; set emoji "👷"
-        case revert
+        case "revert"
             set type revert; set emoji "⏪"
         case '*'
             set_color red
@@ -341,7 +336,7 @@ function ginit
     set_color green
     echo "✅ Git repository initialized without hooks"
     set_color normal
-endg
+end
 
 function yaw
     set -l lockfiles pnpm-lock.yaml yarn.lock package-lock.json
