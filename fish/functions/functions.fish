@@ -48,23 +48,23 @@ function gc
     # Direct mapping without redundant cases
     switch (string lower $input_type)
         case "r" "refactor"
-            set type refactor; set emoji "👷"
+            set type refactor; set emoji "👷"; set_color cyan
         case "fi" "fix"
-            set type fix; set emoji "🛠️"
+            set type fix; set emoji "🛠️"; set_color yellow
         case "d" "docs"
-            set type docs; set emoji "📝"
+            set type docs; set emoji "📝"; set_color blue
         case "s" "style"
-            set type style; set emoji "🎨"
+            set type style; set emoji "🎨"; set_color magenta
         case "t" "test"
-            set type test; set emoji "🐳"
+            set type test; set emoji "🐳"; set_color green
         case "c" "chore"
-            set type chore; set emoji "🌻"
+            set type chore; set emoji "🌻"; set_color cyan
         case "p" "perf"
-            set type perf; set emoji "🚀"
+            set type perf; set emoji "🚀"; set_color blue
         case "f" "feat"
-            set type feat; set emoji "🎸"
+            set type feat; set emoji "🎸"; set_color green
         case "revert"
-            set type revert; set emoji "⏪"
+            set type revert; set emoji "⏪"; set_color red
         case '*'
             set_color red
             echo "❌ Unknown commit type: $input_type"
@@ -77,7 +77,19 @@ function gc
         set type (string upper (string sub -s 1 -l 1 $type))(string sub -s 2 $type)
     end
 
+    echo "📝 Committing changes..."
     git commit -m "$type: $emoji $message"
+    set -l commit_status $status
+    
+    if test $commit_status -eq 0
+        set_color green
+        echo "✅ Commit successful!"
+        echo "🏷️  $type: $emoji $message"
+    else
+        set_color red
+        echo "❌ Commit failed!"
+    end
+    set_color normal
 end
 
 # Directory Navigation
