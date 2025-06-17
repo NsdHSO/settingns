@@ -40,47 +40,51 @@ function gc
         return 1
     end
 
+    # Define type mappings in arrays for faster lookup
+    set -l types   r    fi   d     s      t     c      p     f     revert
+    set -l long    refactor fix docs style test chore perf feat revert
+    set -l emojis  👷    🛠️    📝    🎨     🐳    🌻     🚀    🎸    ⏪
+    set -l colors  cyan yellow blue magenta green cyan blue green red
+
     set -l input_type $argv[1]
     set -l message "$argv[2..-1]"
-    set -l type
-    set -l emoji
-
-    # Direct mapping without redundant cases
-    switch (string lower $input_type)
-        case "r" "refactor"
-            set type refactor; set emoji "👷"; set_color cyan
-        case "fi" "fix"
-            set type fix; set emoji "🛠️"; set_color yellow
-        case "d" "docs"
-            set type docs; set emoji "📝"; set_color blue
-        case "s" "style"
-            set type style; set emoji "🎨"; set_color magenta
-        case "t" "test"
-            set type test; set emoji "🐳"; set_color green
-        case "c" "chore"
-            set type chore; set emoji "🌻"; set_color cyan
-        case "p" "perf"
-            set type perf; set emoji "🚀"; set_color blue
-        case "f" "feat"
-            set type feat; set emoji "🎸"; set_color green
-        case "revert"
-            set type revert; set emoji "⏪"; set_color red
-        case '*'
-            set_color red
-            echo "❌ Unknown commit type: $input_type"
-            set_color normal
-            return 1
+    
+    # Find index of type in arrays
+    set -l idx 1
+    set -l found 0
+    for t in $types
+        if test "$input_type" = "$t" -o "$input_type" = "$long[$idx]"
+            set found 1
+            break
+        end
+        set idx (math $idx + 1)
     end
 
-    # Capitalize type if original input was uppercase
+    if test $found -eq 0
+        set_color red
+        echo "❌ Unknown commit type: $input_type"
+        set_color normal
+        return 1
+    end
+
+    # Get values from arrays
+    set -l type $long[$idx]
+    set -l emoji $emojis[$idx]
+    
+    # Capitalize if input was uppercase
     if string match -rq '^[A-Z]' -- $input_type
-        set type (string upper (string sub -s 1 -l 1 $type))(string sub -s 2 $type)
+        set type (string sub -s 1 -l 1 $type | string upper)(string sub -s 2 $type)
     end
 
+    # Batch operations to reduce color switches
+    set_color $colors[$idx]
     echo "📝 Committing changes..."
+    
+    # Perform commit
     git commit -m "$type: $emoji $message"
     set -l commit_status $status
     
+    # Show result with single color switch
     if test $commit_status -eq 0
         set_color green
         echo "✅ Commit successful!"
