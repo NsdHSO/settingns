@@ -163,7 +163,7 @@ function gio
     
     # Combine fetch and pull into one command
     set -l output (git pull --ff-only 2>&1)
-    set -l status $status
+    set -l status
     
     if test $status -eq 0
         if string match -q "*Already up to date*" "$output"
@@ -411,57 +411,55 @@ end
 
 function gip
     set_color -o blue
-    echo "🚀 Initiating Git Push Sequence 📤"
-    echo "--------------------------------"
+    echo "🚀 Git Push"
     set_color normal
-    
-    # Get current branch and push in one command
-    set -l push_output (git push --porcelain 2>&1)
-    set -l push_status $status
-    
-    # Process the output with colors
-    if test $push_status -eq 0
-        if string match -q "*Everything up-to-date*" "$push_output"
-            set_color green
-            echo "✨ Already up-to-date!"
-        else
-            echo $push_output | while read -l line
-                switch "$line"
-                    case "*Enumerating objects*"
-                        set_color yellow
-                        echo "🔍 $line"
-                    case "*Counting objects*"
-                        set_color magenta
-                        echo "🔢 $line"
-                    case "*Compressing objects*"
-                        set_color cyan
-                        echo "🗜️ $line"
-                    case "*Writing objects*"
-                        set_color blue
-                        echo "💾 $line"
-                    case "*remote: Resolving deltas*"
-                        set_color purple
-                        echo "🔄 $line"
-                    case "*To*"
-                        set_color green
-                        echo "🎯 $line"
-                    case "*"
-                        echo "$line"
-                end
-                set_color normal
-            end
-            set_color -o green
-            echo "✅ Push successful!"
-        end
-    else
+
+    # Get branch and remote info in one command
+    set -l remote_info (git remote 2>/dev/null)
+    if test -z "$remote_info"
         set_color red
-        echo "❌ Push failed!"
-        echo "Error details:"
-        set_color yellow
-        echo $push_output
+        echo "❌ No remote repository configured"
+        set_color normal
+        return 1
+    end
+
+    # Push with progress but optimized output
+    git push --progress 2>&1 | while read -l line
+        switch "$line"
+            case "*fatal:*" "*error:*"
+                set_color red
+                echo "❌ $line"
+            case "*Everything up-to-date*"
+                set_color green
+                echo "✨ Already in sync"
+            case "*Enumerating objects*"
+                set_color yellow
+                echo "📦 Preparing changes..."
+            case "*Counting objects*" "*Compressing objects*"
+                # Skip intermediate progress messages
+                true
+            case "*Writing objects*"
+                set_color cyan
+                echo "📤 Uploading changes..."
+            case "*remote: *" "*To *"
+                # Only show final confirmation
+                if string match -q "*-> *" "$line"
+                    set_color green
+                    echo "✅ Push complete"
+                end
+            case "*"
+                # Skip other progress messages
+                true
+        end
+    end
+    set -l push_status $status
+
+    if test $push_status -ne 0
+        set_color red
+        echo "❌ Push failed"
+        set_color normal
+        return 1
     end
     
-    set_color -o blue
-    echo "--------------------------------"
     set_color normal
 end
