@@ -418,6 +418,24 @@ function gip
     echo "🚀 Git Push"
     set_color normal
 
+    # Check for uncommitted changes
+    set -l has_changes (git status --porcelain)
+    if test -n "$has_changes"
+        set_color yellow
+        echo "⚠️ You have uncommitted changes:"
+        git status --short
+        echo ""
+        read -P "🤔 Do you want to commit these changes first? (Y/n): " should_commit
+        set_color normal
+        
+        if test -z "$should_commit"; or string match -qi "y*" $should_commit
+            set_color cyan
+            echo "📝 Please use gc to commit your changes first"
+            set_color normal
+            return 1
+        end
+    end
+
     # Get branch and remote info in one command
     set -l remote_info (git remote 2>/dev/null)
     if test -z "$remote_info"
