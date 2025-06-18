@@ -428,12 +428,17 @@ function gip
         read -P "🤔 Do you want to commit these changes first? (Y/n): " should_commit
         set_color normal
         
+        # If user wants to commit (default yes) then exit and suggest using gc
         if test -z "$should_commit"; or string match -qi "y*" $should_commit
             set_color cyan
             echo "📝 Please use gc to commit your changes first"
             set_color normal
             return 1
         end
+        # Otherwise continue with push
+        set_color yellow
+        echo "⚠️ Proceeding with push, leaving changes uncommitted..."
+        set_color normal
     end
 
     # Get branch and remote info in one command
