@@ -418,26 +418,11 @@ function gip
     echo "🚀 Git Push"
     set_color normal
 
-    # Check for uncommitted changes
-    set -l has_changes (git status --porcelain)
-    if test -n "$has_changes"
-        set_color yellow
-        echo "⚠️ You have uncommitted changes:"
-        git status --short
-        echo ""
-        read -P "🤔 Do you want to commit these changes first? (Y/n): " should_commit
-        set_color normal
-        
-        # If user wants to commit (default yes) then exit and suggest using gc
-        if test -z "$should_commit"; or string match -qi "y*" $should_commit
-            set_color cyan
-            echo "📝 Please use gc to commit your changes first"
-            set_color normal
-            return 1
-        end
-        # Otherwise continue with push
-        set_color yellow
-        echo "⚠️ Proceeding with push, leaving changes uncommitted..."
+    # Show last commit info
+    set -l last_commit (git log -1 --format="%h - %s" 2>/dev/null)
+    if test -n "$last_commit"
+        set_color cyan
+        echo "📌 Last commit: $last_commit"
         set_color normal
     end
 
