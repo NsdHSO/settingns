@@ -469,39 +469,39 @@ function gip
 end
 
 function gtore
-    # Get list of modified files (unstaged changes)
+    # Get modified files and check count in one operation
     set -l modified_files (git diff --name-only)
+    set -l file_count (count $modified_files)
     
-    # Check if there are any modified files
-    if test (count $modified_files) -eq 0
+    if test $file_count -eq 0
         set_color red
         echo "❌ No unstaged changes found."
         set_color normal
         return 0
     end
 
-    set_color cyan
-    echo "📝 Modified files (unstaged):"
-    echo "=========================="
-    set_color normal
-
-    # Display numbered list of modified files
-    for i in (seq 1 (count $modified_files))
+    # Use arrays for better organization
+    set -l numbers (seq 1 $file_count)
+    
+    # Batch color changes and output
+    begin
+        set_color cyan
+        echo "📝 Modified files (unstaged):"
+        echo "=========================="
         set_color yellow
-        echo "$i) $modified_files[$i]"
+        for i in $numbers
+            echo "$i) $modified_files[$i]"
+        end
+        set_color blue
+        echo \n"📋 Enter the numbers of files to restore (space-separated):"
+        echo "Example: 1 3 5 or just 2"
+        echo "Press Enter without typing anything to cancel"
         set_color normal
     end
-
-    echo ""
-    set_color blue
-    echo "📋 Enter the numbers of files you want to restore (space-separated):"
-    echo "Example: 1 3 5 or just 2"
-    echo "Press Enter without typing anything to cancel"
-    set_color normal
     
     read -P "➤ " input
 
-    # Exit if no input
+    # Early exit for empty input
     if test -z "$input"
         set_color yellow
         echo "⚠️  No files selected. Exiting..."
@@ -509,66 +509,53 @@ function gtore
         return 0
     end
 
-    # Parse input and validate numbers
+    # Efficient selection processing
     set -l selected_files
-    set -l selected_names
-    
+    set -l invalid_selections
     for num in (string split ' ' $input)
-        # Check if input is a valid number
-        if not string match -qr '^[0-9]+$' $num
-            set_color red
-            echo "❌ Error: '$num' is not a valid number"
-            set_color normal
-            return 1
+        if string match -qr '^[0-9]+$' $num; and test $num -ge 1 -a $num -le $file_count
+            set -a selected_files $modified_files[$num]
+        else
+            set -a invalid_selections $num
         end
-        
-        # Check if number is within range
-        if test $num -lt 1 -o $num -gt (count $modified_files)
-            set_color red
-            echo "❌ Error: $num is out of range (1-"(count $modified_files)")"
-            set_color normal
-            return 1
-        end
-        
-        # Add file to selection
-        set -a selected_files $modified_files[$num]
-        set -a selected_names $num
     end
 
-    # Show selected files and confirm
-    echo ""
-    set_color green
-    echo "✅ Selected files to restore:"
-    set_color normal
-    for file in $selected_files
+    # Handle invalid selections
+    if test (count $invalid_selections) -gt 0
+        set_color red
+        echo "❌ Invalid selection(s): $invalid_selections"
+        echo "Valid range is 1-$file_count"
+        set_color normal
+        return 1
+    end
+
+    # Show selected files
+    begin
+        set_color green
+        echo \n"✅ Selected files to restore:"
         set_color white
-        echo "  - $file"
+        printf "  - %s\n" $selected_files
+        set_color yellow
+        read -P "⚠️  Are you sure you want to restore these files? (Y/n): " confirm
         set_color normal
     end
-
-    echo ""
-    set_color yellow
-    read -P "⚠️  Are you sure you want to restore these files? (Y/n): " confirm
-    set_color normal
 
     if test -z "$confirm"; or string match -qi 'y*' $confirm
-        set_color green
-        echo "🔄 Restoring selected files..."
-        set_color normal
-        
-        for file in $selected_files
+        # Batch restore operation
+        begin
+            set_color green
+            echo "🔄 Restoring selected files..."
             set_color cyan
-            echo "📄 Restoring: $file"
-            set_color normal
-            git checkout HEAD -- $file
+            for file in $selected_files
+                echo "📄 Restoring: $file"
+                git checkout HEAD -- $file
+            end
+            set_color green
+            echo "✨ Done!"
         end
-        
-        set_color green
-        echo "✨ Done!"
-        set_color normal
     else
         set_color yellow
         echo "🚫 Operation cancelled."
-        set_color normal
     end
+    set_color normal
 end
