@@ -262,7 +262,6 @@ function gis
 end
 
 # Process Management
-# Process Management
 function killport
     if test (count $argv) -eq 0
         set_color red
