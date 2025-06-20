@@ -122,7 +122,7 @@ source ~/.config/fish/personalized/alias.fish
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Explicitly source your functions file
-source ~/.config/fish/functions/functions.fish
+source ~/.config/fish/functions/all_functions.fish
 
 set -Ua fish_user_paths $HOME/.cargo/bin
 
