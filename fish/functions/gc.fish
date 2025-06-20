@@ -6,20 +6,53 @@ function gc
         return 1
     end
 
-    # Use associative arrays for fast lookup
-    set -l type_map r=refactor fi=fix d=docs s=style t=test c=chore p=perf f=feat revert=revert
-    set -l emoji_map refactor=👷 fix=🛠️ docs=📝 style=🎨 test=🐳 chore=🌻 perf=🚀 feat=🎸 revert=⏪
-    set -l color_map refactor=cyan fix=yellow docs=blue style=magenta test=green chore=cyan perf=blue feat=green revert=red
-
     set -l input_type (string lower $argv[1])
     set -l message "$argv[2..-1]"
 
-    set -l type $type_map[$input_type]
-    if test -z "$type"
-        set -l type $input_type
+    set -l type ""
+    set -l emoji ""
+    set -l color ""
+
+    switch $input_type
+        case f feat
+            set type feat
+            set emoji "🎸"
+            set color green
+        case fi fix
+            set type fix
+            set emoji "🛠️"
+            set color yellow
+        case d docs
+            set type docs
+            set emoji "📝"
+            set color blue
+        case s style
+            set type style
+            set emoji "🎨"
+            set color magenta
+        case t test
+            set type test
+            set emoji "🐳"
+            set color green
+        case c chore
+            set type chore
+            set emoji "🌻"
+            set color cyan
+        case p perf
+            set type perf
+            set emoji "🚀"
+            set color blue
+        case r refactor
+            set type refactor
+            set emoji "👷"
+            set color cyan
+        case revert
+            set type revert
+            set emoji "⏪"
+            set color red
+        case '*'
+            set type $input_type
     end
-    set -l emoji $emoji_map[$type]
-    set -l color $color_map[$type]
 
     if test -z "$emoji"; or test -z "$color"
         set_color red
