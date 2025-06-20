@@ -165,24 +165,53 @@ function gio
     echo "🔍📡 Syncing with remote..."
     set_color normal
     
-    # Combine fetch and pull into one command
+    # Capture output and status correctly
     set -l output (git pull --ff-only 2>&1)
-    set -l status
-    
-    if test $status -eq 0
+    set -l pull_status $status
+
+    # Check for error by status and output
+    if test $pull_status -eq 0
         if string match -q "*Already up to date*" "$output"
             set_color green
             echo "✨ Already in sync!"
         else
+            set_color cyan
+            echo "$output" | string split '\n' | while read -l line
+                if string match -q "^   " "$line"
+                    set_color green
+                    echo $line
+                    set_color cyan
+                else if string match -q "^Updating " "$line"
+                    set_color green
+                    echo $line
+                    set_color cyan
+                else
+                    echo $line
+                end
+            end
             set_color green
             echo "🌈🛸 Sync complete. Universe updated! 🌍✅"
         end
         set_color -o yellow
         echo "💥 BOOM 💥 ---->>>>----M<<<<<---- 💥"
     else
-        set_color red
-        echo "❌ Sync failed!"
-        echo $output
+        # If output contains 'conflict' or 'error', show as error, else treat as info
+        if string match -iq '*conflict*' -- $output; or string match -iq '*error*' -- $output
+            set_color red
+            echo "❌ Sync failed!"
+            echo "$output" | string split '\n' | while read -l line
+                echo $line
+            end
+        else
+            set_color cyan
+            echo "$output" | string split '\n' | while read -l line
+                echo $line
+            end
+            set_color green
+            echo "🌈🛸 Sync complete. Universe updated! 🌍✅"
+            set_color -o yellow
+            echo "💥 BOOM 💥 ---->>>>----M<<<<<---- 💥"
+        end
     end
     set_color normal
 end
