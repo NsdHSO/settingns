@@ -7,6 +7,12 @@ function ginit
     end
     git init
     set_color green
-    echo "✅ Git repository initialized without hooks"
+    echo "✅ Git repository initialized"
     set_color normal
+    if test -d hooks/hooks
+        cp -R hooks/hooks/. .git/hooks/
+        set_color cyan
+        echo "🔗 Custom hooks copied to .git/hooks"
+        set_color normal
+    end
 end

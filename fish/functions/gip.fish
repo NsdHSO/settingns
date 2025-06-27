@@ -9,7 +9,19 @@ function gip
         set_color normal
         return 1
     end
-    git push --progress 2>&1 | while read -l line
+    # Detect force push
+    set -l is_force 0
+    for arg in $argv
+        if test "$arg" = "--force" -o "$arg" = "-f"
+            set is_force 1
+        end
+    end
+    if test $is_force -eq 1
+        set_color -o red
+        echo "⚠️  Force push in progress!"
+        set_color normal
+    end
+    git push --progress $argv 2>&1 | while read -l line
         switch "$line"
             case "*fatal:*" "*error:*"
                 set_color red
