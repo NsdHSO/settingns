@@ -1,0 +1,12 @@
+.idea
+.vscode
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.log
+*.DS_Store
+*.idea
+*.vscode
+github-copilot

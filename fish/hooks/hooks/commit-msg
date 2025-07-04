@@ -6,6 +6,7 @@ EMOJI_MAPPER() {
     case $type in
         feat*|f) echo "🎸" ;;
         fix*|fi) echo "🛠️" ;;
+        fo*|re) echo "✨" ;;
         docs*|d) echo "📝" ;;
         style*|s) echo "🎨" ;;
         refactor*|r) echo "👷" ;;

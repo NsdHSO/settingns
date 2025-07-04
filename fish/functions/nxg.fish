@@ -7,15 +7,15 @@ function nxg
     end
     set -l type $argv[1]
     set -l name $argv[2]
+    mkdir -p $name && cd $name
+    echo "Directory ✋🏿🧑🏿‍🦲🤚🏿🔫👮🏻: $name | 🚥 Changed into directory"
     switch $type
         case interface
             nx g interface $name
         case service s
             nx g @nx/angular:service --name=$name
         case component c
-            mkdir -p $name && cd $name
             set_color cyan
-            echo "Directory ✋🏿🧑🏿‍🦲🤚🏿🔫👮🏻: $name | 🚥 Changed into directory"
             set_color normal
             nx g @nx/angular:component --name=$name --standalone=true --nameAndDirectoryFormat=as-provided
             set_color green

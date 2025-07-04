@@ -18,6 +18,10 @@ function gc
             set type feat
             set emoji "🎸"
             set color green
+        case fo re
+            set type format
+            set emoji "✨"
+            set color green
         case fi fix
             set type fix
             set emoji "🛠️"
