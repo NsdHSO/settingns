@@ -17,7 +17,7 @@
     "macos",
     "linux"
   ],
-  "author": "David Nechiforel",
+  "author": "NsdHSO",
   "license": "MIT",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
