@@ -1,0 +1,28 @@
+{
+  "name": "npm-permissions-fix",
+  "version": "0.0.0-development",
+  "description": "A tool to fix npm global permissions across macOS and Linux",
+  "main": "fix_npm_permissions.sh",
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/npm-permissions-fix.git"
+  },
+  "keywords": [
+    "npm",
+    "permissions",
+    "fix",
+    "macos",
+    "linux"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "semantic-release": "^23.0.0"
+  }
+}

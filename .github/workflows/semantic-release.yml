@@ -1,0 +1,62 @@
+name: Semantic Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_run:
+    workflows: [ "Publish In github page" ]
+    types:
+      - completed
+    branches:
+      - master
+
+jobs:
+  release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    # Only run this job if the workflow was triggered by a push to master
+    # or if the previous workflow completed successfully
+    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      contents: write      # to create release (semantic-release)
+      issues: write        # to create issues (semantic-release)
+      pull-requests: write # to create pull requests (semantic-release)
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          # This is important - it ensures the action runs in the context of your repository
+          # and can push changes
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci || npm install --legacy-peer-deps
+
+      - name: Setup Git identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Install semantic-release and plugins
+        run: |
+          npm install --save-dev semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/git \
+            @semantic-release/github \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx semantic-release --debug
