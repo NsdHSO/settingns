@@ -17,7 +17,7 @@ function nxg
         case component c
             set_color cyan
             set_color normal
-            nx g @nx/angular:component --name=$name --standalone=true --nameAndDirectoryFormat=as-provided
+            nx g @nx/angular:component --name=$name --standalone=true
             set_color green
             echo "Component ▄︻デ۪۞━一💥 : $name created"
             set_color normal
