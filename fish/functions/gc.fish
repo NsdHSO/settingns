@@ -55,7 +55,7 @@ function gc
             set emoji "⏪"
             set color red
         case '*'
-            set type $input_type
+            set type ''
             set emoji "🚀"
             set color blue
     end
