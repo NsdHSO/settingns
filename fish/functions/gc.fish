@@ -71,7 +71,6 @@ function gc
     if string match -rq '^[A-Z]' -- $argv[1]
         set type (string upper (string sub -s 1 -l 1 $type))(string sub -s 2 $type)
     end
-
     set_color $color
     echo "📝 Committing changes..."
     
