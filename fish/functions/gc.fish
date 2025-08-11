@@ -55,7 +55,7 @@ function gc
             set emoji "⏪"
             set color red
         case '*'
-            set type ''
+            set type ""
             set emoji "🚀"
             set color blue
     end
@@ -74,15 +74,30 @@ function gc
 
     set_color $color
     echo "📝 Committing changes..."
-    git commit -m "$type: $emoji $message"
-    set -l commit_status $status
-    if test $commit_status -eq 0
-        set_color green
-        echo "✅ Commit successful!"
-        echo "🏷️  $type: $emoji $message"
+    
+    # Create commit message based on whether type is empty
+    if test -z "$type"
+        git commit -m "$emoji $input_type $message"
+        set -l commit_status $status
+        if test $commit_status -eq 0
+            set_color green
+            echo "✅ Commit successful!"
+            echo "🏷️  $emoji $input_type $message"
+        else
+            set_color red
+            echo "❌ Commit failed!"
+        end
     else
-        set_color red
-        echo "❌ Commit failed!"
+        git commit -m "$type: $emoji $message"
+        set -l commit_status $status
+        if test $commit_status -eq 0
+            set_color green
+            echo "✅ Commit successful!"
+            echo "🏷️  $type: $emoji $message"
+        else
+            set_color red
+            echo "❌ Commit failed!"
+        end
     end
     set_color normal
 end
