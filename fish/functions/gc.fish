@@ -56,6 +56,8 @@ function gc
             set color red
         case '*'
             set type $input_type
+            set emoji "🚀"
+            set color blue
     end
 
     if test -z "$emoji"; or test -z "$color"
