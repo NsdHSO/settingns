@@ -14,7 +14,7 @@ EMOJI_MAPPER() {
         chore*|c) echo "🌻" ;;
         perf*|p) echo "🚀" ;;
         revert*) echo "⏪" ;;
-        *) echo "" ;;
+        *) echo "🤷" ;;
     esac
 }
 
@@ -57,7 +57,18 @@ fi
 
 # If a valid type and emoji were detected, rewrite message
 if [ -n "$EMOJI" ]; then
-    NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI $MESSAGE_PART"
+    # Check if this is a known type (has a normalized version)
+    case $COMMIT_TYPE in
+        feat*|f|fo*|re|fix*|fi|docs*|d|style*|s|refactor*|r|test*|t|chore*|c|perf*|p|revert*)
+            # Known type - use format: emoji message
+            NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI $MESSAGE_PART"
+            ;;
+        *)
+            # Unknown type - use format: emoji type message (no colon)
+            NEW_FIRST_LINE="$EMOJI $COMMIT_TYPE $MESSAGE_PART"
+            ;;
+    esac
+    
     REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
 
     if [ -n "$REMAINING_LINES" ]; then
