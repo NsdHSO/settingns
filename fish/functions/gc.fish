@@ -56,7 +56,7 @@ function gc
             set color red
         case '*'
             set type ""
-            set emoji "🚀"
+            set emoji "🤷"
             set color blue
     end
 
