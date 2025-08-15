@@ -76,12 +76,12 @@ function gc
     
     # Create commit message based on whether type is empty
     if test -z "$type"
-        git commit -m "$emoji $input_type $message"
+        git commit -m "$emoji $message"
         set -l commit_status $status
         if test $commit_status -eq 0
             set_color green
             echo "✅ Commit successful!"
-            echo "🏷️  $emoji $input_type $message"
+            echo "🏷️  $emoji $message"
         else
             set_color red
             echo "❌ Commit failed!"
