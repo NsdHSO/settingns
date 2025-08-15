@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/NsdHSO/settingns/compare/v1.0.0...v1.1.0) (2025-08-11)
+
+
+### Features
+
+* 🎸 added correct ([a6498d2](https://github.com/NsdHSO/settingns/commit/a6498d2016c5dc5fd81224e95b8cc391256afece))
+* 🎸 tried to be the same ([8d68804](https://github.com/NsdHSO/settingns/commit/8d68804031c3580ac6a0b0abbd47cef4a977d3b8))
+
 # 1.0.0 (2025-07-22)
 
 
