@@ -21,11 +21,18 @@ function gip
         echo "⚠️  Force push in progress!"
         set_color normal
     end
+    set -l error_detected 0
     git push --progress $argv 2>&1 | while read -l line
         switch "$line"
             case "*fatal:*" "*error:*"
                 set_color red
                 echo "❌ $line"
+                if string match -q "*non-fast-forward*" "$line"
+                    set_color yellow
+                    echo "💡 Your branch is behind the remote. Run 'git pull' to update before pushing."
+                    set_color normal
+                end
+                set -g error_detected 1
             case "*Everything up-to-date*"
                 set_color green
                 echo "✨ Already in sync"
@@ -50,6 +57,11 @@ function gip
     if test $push_status -ne 0
         set_color red
         echo "❌ Push failed"
+        if test $error_detected -eq 0
+            set_color yellow
+            echo "💡 Check the git output above for details. Common issues: non-fast-forward (run 'git pull'), authentication, or network problems."
+            set_color normal
+        end
         set_color normal
         return 1
     end
