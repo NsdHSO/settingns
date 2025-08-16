@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/NsdHSO/settingns/compare/v1.1.0...v1.2.0) (2025-08-15)
+
+
+### Features
+
+* 🎸 added some commit free for commit msg ([f52127d](https://github.com/NsdHSO/settingns/commit/f52127de4095b9139e4da4b15cc0d22027b160ee))
+* 🎸 added unknow emojie ([da6f1fb](https://github.com/NsdHSO/settingns/commit/da6f1fbb24c589d291dbff70bdba1c94f462b002))
+
 # [1.1.0](https://github.com/NsdHSO/settingns/compare/v1.0.0...v1.1.0) (2025-08-11)
 
 
