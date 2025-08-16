@@ -86,12 +86,12 @@ function gc
 
     set_color $color
     echo "📝 Committing changes..."
-    git commit -m "$type: $emoji $message"
+    git commit -m "$emoji $message"
     set -l commit_status $status
     if test $commit_status -eq 0
         set_color green
         echo "✅ Commit successful!"
-        echo "🏷️  $type: $emoji $message"
+        echo "🏷️  $emoji $message"
     else
         set_color red
         echo "❌ Commit failed!"
