@@ -32,48 +32,57 @@ function gc
     set -l emoji ""
     set -l color ""
 
+
+    set -l recognized 0
     switch $input_type
         case f feat
             set type feat
             set emoji "🎸"
             set color green
+            set recognized 1
         case fi fix
             set type fix
             set emoji "🛠️"
             set color yellow
+            set recognized 1
         case d docs
             set type docs
             set emoji "📝"
             set color blue
+            set recognized 1
         case s style
             set type style
             set emoji "🎨"
             set color magenta
+            set recognized 1
         case t test
             set type test
             set emoji "🐳"
             set color green
+            set recognized 1
         case c chore
             set type chore
             set emoji "🌻"
             set color cyan
+            set recognized 1
         case p perf
             set type perf
             set emoji "🚀"
             set color blue
+            set recognized 1
         case r refactor
             set type refactor
             set emoji "👷"
             set color cyan
+            set recognized 1
         case revert
             set type revert
             set emoji "⏪"
             set color red
-        case '*'
-            set type $input_type
+            set recognized 1
     end
 
-    if test -z "$emoji"; or test -z "$color"
+    if test $recognized -eq 0
         set type ""
         set emoji "🤷"
         set color blue
