@@ -1,9 +1,28 @@
+
 function gc
-    if test (count $argv) -lt 2
+    if test (count $argv) -eq 0
         set_color red
-        echo "❌ Usage: gc <type> <message>"
+        echo "❌ Usage: gc <type> <message> or gc <message>"
         set_color normal
         return 1
+    end
+
+    if test (count $argv) -eq 1
+        set -l message "$argv[1]"
+        set_color blue
+        echo "📝 Committing changes..."
+        git commit -m "$message"
+        set -l commit_status $status
+        if test $commit_status -eq 0
+            set_color green
+            echo "✅ Commit successful!"
+            echo "🏷️  $message"
+        else
+            set_color red
+            echo "❌ Commit failed!"
+        end
+        set_color normal
+        return $commit_status
     end
 
     set -l input_type (string lower $argv[1])
@@ -17,10 +36,6 @@ function gc
         case f feat
             set type feat
             set emoji "🎸"
-            set color green
-        case fo re
-            set type format
-            set emoji "✨"
             set color green
         case fi fix
             set type fix
@@ -55,48 +70,31 @@ function gc
             set emoji "⏪"
             set color red
         case '*'
-            set type ""
-            set emoji "🤷"
-            set color blue
+            set type $input_type
     end
 
     if test -z "$emoji"; or test -z "$color"
-        set_color red
-        echo "❌ Unknown commit type: $input_type"
-        set_color normal
-        return 1
+        set type ""
+        set emoji "🤷"
+        set color blue
     end
 
     # Capitalize if input was uppercase
     if string match -rq '^[A-Z]' -- $argv[1]
         set type (string upper (string sub -s 1 -l 1 $type))(string sub -s 2 $type)
     end
+
     set_color $color
     echo "📝 Committing changes..."
-    
-    # Create commit message based on whether type is empty
-    if test -z "$type"
-        git commit -m "$emoji $message"
-        set -l commit_status $status
-        if test $commit_status -eq 0
-            set_color green
-            echo "✅ Commit successful!"
-            echo "🏷️  $emoji $message"
-        else
-            set_color red
-            echo "❌ Commit failed!"
-        end
+    git commit -m "$type: $emoji $message"
+    set -l commit_status $status
+    if test $commit_status -eq 0
+        set_color green
+        echo "✅ Commit successful!"
+        echo "🏷️  $type: $emoji $message"
     else
-        git commit -m "$type: $emoji $message"
-        set -l commit_status $status
-        if test $commit_status -eq 0
-            set_color green
-            echo "✅ Commit successful!"
-            echo "🏷️  $type: $emoji $message"
-        else
-            set_color red
-            echo "❌ Commit failed!"
-        end
+        set_color red
+        echo "❌ Commit failed!"
     end
     set_color normal
 end
