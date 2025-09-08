@@ -26,6 +26,8 @@ alias lsop="lsof"
 alias kila="kill -9"
 alias pnd="pnpm"
 alias nxg="nxg"
-alias work1='cd /Volumes/Work; echo "🚀 Moved to /Volumes/Work"'
-alias work='cd /Volumes/Best; echo "🚀 Moved to /Volumes/Best"'
+alias work1='cd /Volumes/Best_Photo; echo "🚀 Moved to /Volumes/Best Photo"'
+alias work='cd /Volumes/Work; echo "🚀 Moved to /Volumes/Work"'
+alias open_config='code ~/.config'
+
 
