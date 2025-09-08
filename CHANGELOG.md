@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/NsdHSO/settingns/compare/v1.2.0...v1.3.0) (2025-09-08)
+
+
+### Features
+
+* 🎸 added open_config command and updated the work directory ([44e37b7](https://github.com/NsdHSO/settingns/commit/44e37b7efbd1009b24fa9e1486978cec2b12ca64))
+
 # [1.2.0](https://github.com/NsdHSO/settingns/compare/v1.1.0...v1.2.0) (2025-08-15)
 
 
