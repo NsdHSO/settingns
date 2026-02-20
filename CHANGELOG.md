@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/NsdHSO/settingns/compare/v1.4.0...v1.5.0) (2026-02-20)
+
+
+### Features
+
+* 🎸 added backuup ([f66d1de](https://github.com/NsdHSO/settingns/commit/f66d1de9a77e27206f9cc129e93416ceee81ae21))
+
 # [1.4.0](https://github.com/NsdHSO/settingns/compare/v1.3.0...v1.4.0) (2026-02-20)
 
 
