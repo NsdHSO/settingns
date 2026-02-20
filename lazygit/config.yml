@@ -1,0 +1,80 @@
+# Lazygit configuration with Dracula theme
+# Created: 2026-02-19
+
+gui:
+  # Theme configuration
+  theme:
+    lightTheme: false
+    activeBorderColor:
+      - '#bd93f9'  # Dracula purple
+      - bold
+    inactiveBorderColor:
+      - '#44475a'  # Dracula comment
+    searchingActiveBorderColor:
+      - '#ffb86c'  # Dracula orange
+      - bold
+    selectedLineBgColor:
+      - '#44475a'  # Dracula selection
+    selectedRangeBgColor:
+      - '#44475a'
+    cherryPickedCommitBgColor:
+      - '#8be9fd'  # Dracula cyan
+    cherryPickedCommitFgColor:
+      - '#282a36'  # Dracula background
+    unstagedChangesColor:
+      - '#ff5555'  # Dracula red
+    defaultFgColor:
+      - '#f8f8f2'  # Dracula foreground
+
+  # Mouse support
+  mouseEvents: true
+  skipUnstageLineWarning: false
+  skipDiscardChangeWarning: false
+  showCommandLog: true
+  showFileTree: true
+
+# Git configuration
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+  commit:
+    signOff: false
+  autoFetch: true
+  autoRefresh: true
+
+# Key bindings (vi-style)
+keybinding:
+  universal:
+    quit: 'q'
+    quit-alt1: '<c-c>'
+    return: '<esc>'
+    quitWithoutChangingDirectory: 'Q'
+    togglePanel: '<tab>'
+    prevItem: '<up>'
+    nextItem: '<down>'
+    prevItem-alt: 'k'
+    nextItem-alt: 'j'
+    prevPage: ','
+    nextPage: '.'
+    scrollLeft: 'H'
+    scrollRight: 'L'
+    gotoTop: '<'
+    gotoBottom: '>'
+    prevBlock: '<left>'
+    nextBlock: '<right>'
+    prevBlock-alt: 'h'
+    nextBlock-alt: 'l'
+
+# Custom commands can be added here
+customCommands: []
+
+# OS-specific settings
+os:
+  editCommand: ''
+  editCommandTemplate: '{{editor}} {{filename}}'
+  openCommand: 'open {{filename}}'
+
+# Startup settings
+notARepository: 'prompt'
+promptToReturnFromSubprocess: true

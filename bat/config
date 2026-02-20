@@ -1,0 +1,11 @@
+# Set theme to Dracula
+--theme="Dracula"
+
+# Show line numbers, Git modifications, and file header
+--style="numbers,changes,header"
+
+# Enable italic text
+--italic-text=always
+
+# Use pager for long output
+--paging=auto

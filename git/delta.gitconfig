@@ -1,0 +1,27 @@
+# ============================================================================
+# Git Delta Configuration
+# ============================================================================
+# Include this in your main ~/.gitconfig with:
+#   [include]
+#       path = ~/.config/git/delta.gitconfig
+#
+# Or manually copy these settings to ~/.gitconfig
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you use a light terminal background
+    side-by-side = true
+    line-numbers = true
+    syntax-theme = Dracula
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default

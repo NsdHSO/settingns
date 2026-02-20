@@ -1,0 +1,209 @@
+FISH SHELL ABBREVIATIONS - COMPLETE LIST
+========================================
+
+GIT ABBREVIATIONS (20+)
+-----------------------
+g        git
+gst      git status
+gco      git checkout
+gcb      git checkout -b
+gpl      git pull
+gps      git push
+gad      git add
+gcm      git commit -m
+gca      git commit --amend
+glg      git log --oneline --graph --decorate
+gdf      git diff
+gbr      git branch
+gbd      git branch -d
+gmg      git merge
+grb      git rebase
+gsh      git stash
+gsp      git stash pop
+gft      git fetch
+gcl      git clone
+grs      git reset
+grh      git reset --hard
+
+DOCKER ABBREVIATIONS (15+)
+--------------------------
+d        docker
+dc       docker-compose
+dcu      docker-compose up
+dcd      docker-compose down
+dcl      docker-compose logs
+dps      docker ps
+dpsa     docker ps -a
+di       docker images
+drm      docker rm
+drmi     docker rmi
+dex      docker exec -it
+dlg      docker logs -f
+dbl      docker build
+dpl      docker pull
+dph      docker push
+
+KUBERNETES ABBREVIATIONS (13+)
+------------------------------
+k        kubectl
+kg       kubectl get
+kgp      kubectl get pods
+kgs      kubectl get services
+kgd      kubectl get deployments
+kd       kubectl describe
+kdel     kubectl delete
+kl       kubectl logs
+klf      kubectl logs -f
+kex      kubectl exec -it
+kap      kubectl apply -f
+kctx     kubectl config use-context
+kns      kubectl config set-context --current --namespace
+
+NPM ABBREVIATIONS (7)
+---------------------
+n        npm
+ni       npm install
+nid      npm install --save-dev
+nr       npm run
+ns       npm start
+nt       npm test
+nb       npm run build
+
+YARN ABBREVIATIONS (7)
+----------------------
+y        yarn
+yi       yarn install
+ya       yarn add
+yad      yarn add --dev
+yr       yarn run
+ys       yarn start
+yt       yarn test
+yb       yarn build
+
+PNPM ABBREVIATIONS (7)
+----------------------
+p        pnpm
+pi       pnpm install
+pa       pnpm add
+pad      pnpm add -D
+pr       pnpm run
+ps       pnpm start
+pt       pnpm test
+pb       pnpm build
+
+SYSTEM ABBREVIATIONS (7)
+------------------------
+c        clear
+h        history
+x        exit
+mkd      mkdir -p
+rmd      rm -rf
+cpr      cp -r
+
+EDITOR ABBREVIATIONS (4)
+------------------------
+v        nvim
+vi       nvim
+e        nvim
+code     code .
+
+NAVIGATION ABBREVIATIONS (4)
+----------------------------
+..       cd ..
+...      cd ../..
+....     cd ../../..
+.....    cd ../../../..
+
+LIST ABBREVIATIONS (4)
+----------------------
+l        ls -lh
+ll       ls -lah
+lt       ls -lth
+ltr      ls -ltrh
+
+CARGO/RUST ABBREVIATIONS (7)
+----------------------------
+cr       cargo run
+cb       cargo build
+ct       cargo test
+cc       cargo check
+cw       cargo watch
+cf       cargo fmt
+cl       cargo clippy
+
+PYTHON ABBREVIATIONS (4)
+------------------------
+py       python3
+pip      pip3
+venv     python3 -m venv venv
+vact     source venv/bin/activate.fish
+
+CONTEXT-AWARE ABBREVIATIONS
+===========================
+
+IN GIT REPOSITORIES:
+-------------------
+b        git branch
+s        git status
+l        git log --oneline
+co       git checkout
+
+IN NODE.JS PROJECTS:
+-------------------
+t        npm test
+d        npm run dev
+bs       npm run build && npm start
+
+IN RUST PROJECTS:
+-----------------
+r        cargo run
+t        cargo test
+b        cargo build
+
+IN PYTHON PROJECTS:
+------------------
+t        pytest
+r        python3 -m
+
+MANAGEMENT COMMANDS
+===================
+abbr_add <name> <expansion>    Add custom abbreviation
+abbr_rm <name>                 Remove abbreviation
+abbr_list [filter]             List all abbreviations
+abbr_search <term>             Search abbreviations
+abbr_help                      Show comprehensive help
+abbr_stats                     Show statistics
+abbr_tips                      Show random tip
+abbr_cheatsheet                Quick reference card
+
+USAGE
+=====
+1. Type abbreviation
+2. Press SPACE to expand
+3. Edit if needed
+4. Press ENTER to execute
+
+EXAMPLES
+========
+gst                    → git status
+gco -b feature         → git checkout -b feature
+dcu -d                 → docker-compose up -d
+kgp -n production      → kubectl get pods -n production
+
+CUSTOM ABBREVIATIONS
+====================
+File: ~/.config/fish/personalized/abbreviations.fish
+
+Add: abbr_add gpp "git pull && git push"
+Remove: abbr_rm gpp
+
+DOCUMENTATION
+=============
+abbreviations-guide.md          Full guide with examples
+abbreviations-quickstart.md     Quick start for beginners
+ABBREVIATIONS-README.md         Complete system documentation
+component-13-summary.md         Implementation summary
+abbreviations-list.txt          This file
+
+TOTAL: 100+ ABBREVIATIONS
+Generated: 2026-02-19

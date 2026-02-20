@@ -1,0 +1,72 @@
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    line-numbers = true
+    side-by-side = true
+    syntax-theme = Dracula
+    plus-style = "syntax #003800"
+    minus-style = "syntax #3f0001"
+
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+    file-decoration-style = none
+    hunk-header-decoration-style = cyan box ul
+
+[delta "line-numbers"]
+    line-numbers-left-style = cyan
+    line-numbers-right-style = cyan
+    line-numbers-minus-style = 124
+    line-numbers-plus-style = 28
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[alias]
+    # Log aliases
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    lga = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+    tree = log --graph --all --oneline --decorate
+
+    # Status and diff aliases
+    st = status -sb
+    df = diff
+    dfs = diff --staged
+    dfc = diff --cached
+
+    # Branch aliases
+    br = branch
+    bra = branch -a
+    brd = branch -d
+    brD = branch -D
+
+    # Commit aliases
+    cm = commit -m
+    cma = commit -am
+    amend = commit --amend
+    undo = reset --soft HEAD^
+
+    # Stash aliases
+    sl = stash list
+    sp = stash pop
+    ss = stash save
+
+    # Worktree aliases
+    wl = worktree list
+    wa = worktree add
+    wr = worktree remove
+
+    # Utility aliases
+    last = log -1 HEAD
+    unstage = reset HEAD --
+    discard = checkout --
+    aliases = config --get-regexp alias

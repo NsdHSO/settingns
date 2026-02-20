@@ -1,0 +1,23 @@
+# Eza theme configuration for Dracula colors
+# This file customizes eza's color output to match Dracula palette
+
+# File type colors
+filekinds:
+  normal: 38;5;255
+  directory: 38;5;141    # Purple
+  symlink: 38;5;212      # Pink
+  executable: 38;5;84    # Green
+
+# Permission colors
+perms:
+  user_read: 38;5;117    # Cyan
+  user_write: 38;5;228   # Yellow
+  user_execute_file: 38;5;84  # Green
+
+# Git status colors
+git:
+  new: 38;5;84          # Green
+  modified: 38;5;228    # Yellow
+  deleted: 38;5;203     # Red
+  renamed: 38;5;141     # Purple
+  typechange: 38;5;212  # Pink
