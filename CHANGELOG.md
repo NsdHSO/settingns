@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/NsdHSO/settingns/compare/v1.5.0...v1.6.0) (2026-02-20)
+
+
+### Features
+
+* 🎸 added agents and docs ([4519f79](https://github.com/NsdHSO/settingns/commit/4519f79e97d02fd526432aae6bd460360ee5bb25))
+
 # [1.5.0](https://github.com/NsdHSO/settingns/compare/v1.4.0...v1.5.0) (2026-02-20)
 
 
