@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# Emoji mappin
+EMOJI_MAPPER() {
+  local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+  case $type in
+    feat*|f) echo "🎸" ;;
+    fix*|fi) echo "🛠️" ;;
+    docs*|d) echo "📝" ;;
+    style*|s) echo "🎨" ;;
+    refactor*|r|ref) echo "👷" ;;  # Added "ref"
+    test*|t) echo "🐳" ;;
+    chore*|c) echo "🌻" ;;
+    perf*|p) echo "🚀" ;;
+    revert*) echo "⏪" ;;
+    *) echo "" ;;
+  esac
+}
+
+# Normalize commit type to canonical lowercase
+NORMALIZE_TYPE() {
+  local type=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+  case $type in
+    feat*|f) echo "feat" ;;
+    fix*|fi) echo "fix" ;;
+    docs*|d) echo "docs" ;;
+    style*|s) echo "style" ;;
+    Refactor*|R|ref) echo "refactor" ;;  # Added "ref"
+    refactor*|r|ref) echo "refactor" ;;  # Added "ref"
+    test*|t) echo "test" ;;
+    chore*|c) echo "chore" ;;
+    perf*|p) echo "perf" ;;
+    revert*) echo "revert" ;;
+    *) echo "$type" ;;
+  esac
+}
+
+# Process commit message
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+FIRST_LINE=$(echo "$COMMIT_MSG" | head -n 1)
+
+# Extract the first word from the line
+COMMIT_TYPE=$(echo "$FIRST_LINE" | awk '{print $1}' | sed 's/:$//')
+MESSAGE_PART=$(echo "$FIRST_LINE" | cut -d' ' -f2-)
+
+# Normalize type and get emoji
+NORMALIZED_TYPE=$(NORMALIZE_TYPE "$COMMIT_TYPE")
+EMOJI=$(EMOJI_MAPPER "$COMMIT_TYPE")
+
+# If emoji already present in message, do nothing
+if echo "$MESSAGE_PART" | grep -q "$EMOJI"; then
+    exit 0
+fi
+
+# If a valid type and emoji were detected, rewrite message
+if [ -n "$EMOJI" ]; then
+    NEW_FIRST_LINE="$NORMALIZED_TYPE: $EMOJI $MESSAGE_PART"
+    REMAINING_LINES=$(echo "$COMMIT_MSG" | tail -n +2)
+
+    if [ -n "$REMAINING_LINES" ]; then
+        printf "%s\n%s\n" "$NEW_FIRST_LINE" "$REMAINING_LINES" > "$COMMIT_MSG_FILE"
+    else
+        echo "$NEW_FIRST_LINE" > "$COMMIT_MSG_FILE"
+    fi
+fi

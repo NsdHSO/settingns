@@ -1,0 +1,18 @@
+# Fish Shell Session Template: web-dev
+# Description: Full-stack web development environment
+# Created: 2026-02-19
+
+# Environment Variables
+set -gx NODE_ENV 'development'
+set -gx DEBUG 'app:*'
+set -gx PORT '3000'
+
+# Startup Commands
+set -l startup_commands \
+    'echo "Web Development Session Initialized"' \
+    'node --version' \
+    'npm --version'
+
+# Custom initialization
+# Uncomment to start development servers
+# set -a startup_commands 'npm run dev'

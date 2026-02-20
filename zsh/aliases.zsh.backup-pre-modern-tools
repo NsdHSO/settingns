@@ -1,0 +1,42 @@
+# Port and process management
+alias lsop="lsof -i"
+alias kila="kill -9"
+
+# Yarn aliases
+alias yai="ylock"
+# yall and yas are defined as functions in ~/.config/zsh/functions/
+
+# Git aliases
+alias gid="git diff"
+alias gdd="git add"
+alias gis="git status"
+alias gip="git push"
+alias gic="git cz"
+alias gio="git"
+alias gim="git commit -m"
+alias gtf="git"
+alias gtt="git"
+alias ghc="git"
+alias gty="git"
+alias gtd="git"
+
+# Editor
+alias vim=nvim
+
+# Directory listing
+alias la='ls -la'
+
+# Python
+alias pqp="python3"
+alias python="python3"
+
+# IDEs
+alias idea="/Applications/IntelliJ\ IDEA.app/Contents/MacOS/idea"
+alias web="/Applications/WebStorm.app/Contents/MacOS/webstorm"
+
+# Package managers
+alias pn="pnpm"
+alias pnd="pnpm"
+
+# Custom tools
+alias nxg="nxg"

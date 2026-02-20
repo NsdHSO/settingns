@@ -1,0 +1,19 @@
+# Fish Shell Session Template: python
+# Description: Python development environment
+# Created: 2026-02-19
+
+# Environment Variables
+set -gx PYTHONPATH '.'
+set -gx PYTHONDONTWRITEBYTECODE '1'
+
+# Startup Commands
+set -l startup_commands \
+    'echo "Python Session Initialized"' \
+    'python --version' \
+    'which python'
+
+# Custom initialization
+# Uncomment to activate virtual environment
+# set -a startup_commands 'source venv/bin/activate.fish'
+# Uncomment to install requirements
+# set -a startup_commands 'pip install -r requirements.txt'

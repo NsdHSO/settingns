@@ -1,0 +1,17 @@
+# Fish Shell Session Template: rust
+# Description: Rust development environment
+# Created: 2026-02-19
+
+# Environment Variables
+set -gx RUST_BACKTRACE '1'
+set -gx CARGO_INCREMENTAL '1'
+
+# Startup Commands
+set -l startup_commands \
+    'echo "Rust Session Initialized"' \
+    'rustc --version' \
+    'cargo --version'
+
+# Custom initialization
+# Uncomment to build project
+# set -a startup_commands 'cargo build'

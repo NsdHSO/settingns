@@ -1,0 +1,209 @@
+================================================================================
+FISH SHELL ENHANCED KEYBINDINGS - QUICK REFERENCE
+================================================================================
+Created: 2026-02-19
+Location: /Users/davidsamuel.nechifor/.config/fish/conf.d/05-keybindings.fish
+================================================================================
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ EDITOR INTEGRATION                                                       │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Alt+E              │ Edit current command in $EDITOR                     │
+│ Ctrl+X Ctrl+E      │ Edit current command in $EDITOR (alternative)       │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ COMMAND MODIFICATION                                                     │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Alt+S              │ Prepend/toggle 'sudo' to current command            │
+│ Alt+.              │ Insert last argument from previous command          │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ CLIPBOARD (macOS)                                                        │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Ctrl+X Ctrl+C      │ Copy current command to clipboard                   │
+│ Ctrl+X Ctrl+V      │ Paste from clipboard to command line                │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ NAVIGATION                                                               │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Alt+B              │ Move backward one word                              │
+│ Alt+F              │ Move forward one word                               │
+│ Ctrl+Left          │ Move backward one word (terminal-specific)          │
+│ Ctrl+Right         │ Move forward one word (terminal-specific)           │
+│ Ctrl+A             │ Move to beginning of line (default)                 │
+│ Ctrl+E             │ Move to end of line (default)                       │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ HISTORY                                                                  │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Ctrl+R             │ Search command history interactively                │
+│ Alt+P              │ Previous command starting with current input        │
+│ Alt+N              │ Next command starting with current input            │
+│ Up/Down            │ Navigate command history                            │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ DIRECTORY NAVIGATION                                                     │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Alt+Up             │ Go to parent directory (cd ..)                      │
+│ Alt+Left           │ Go to previous directory (cd -)                     │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────┐
+│ SCREEN MANAGEMENT                                                        │
+├────────────────────┬─────────────────────────────────────────────────────┤
+│ Ctrl+L             │ Clear screen and scrollback buffer                  │
+└────────────────────┴─────────────────────────────────────────────────────┘
+
+================================================================================
+ENABLING VIM MODE
+================================================================================
+
+Vim mode is DISABLED by default to avoid system keybinding conflicts.
+
+To enable, add to config.fish:
+    set -g FISH_VIM_MODE 1
+
+Then reload:
+    source ~/.config/fish/config.fish
+
+Vim Mode Indicators:
+    [N] = Normal mode (red)
+    [I] = Insert mode (green)
+    [V] = Visual mode (magenta)
+    [R] = Replace mode (yellow)
+
+Cursor Shapes:
+    Normal:  Block
+    Insert:  Line
+    Replace: Underscore
+    Visual:  Block
+
+================================================================================
+USAGE EXAMPLES
+================================================================================
+
+1. Edit Long Command:
+   docker run -it --rm -v $(pwd):/app node:18 npm install
+   [Press Alt+E → Opens in $EDITOR → Edit → Save → Command updated]
+
+2. Quick Sudo Toggle:
+   apt update
+   [Press Alt+S → Becomes: sudo apt update]
+   [Press Alt+S again → Back to: apt update]
+
+3. Reuse Last Argument:
+   mv /very/long/path/file.txt /destination/
+   cd [Press Alt+.]
+   [Becomes: cd /destination/]
+
+4. Copy Command to Clipboard:
+   ffmpeg -i input.mp4 -c:v libx264 -preset slow -crf 22 output.mp4
+   [Press Ctrl+X Ctrl+C → Copied to clipboard]
+
+5. Quick Directory Navigation:
+   # In: /Users/davidsamuel.nechifor/.config/fish/conf.d/
+   [Press Alt+Up → /Users/davidsamuel.nechifor/.config/fish/]
+   [Press Alt+Up → /Users/davidsamuel.nechifor/.config/]
+   [Press Alt+Left → Back to fish/]
+
+6. History Prefix Search:
+   git [Press Alt+P → Cycles through previous git commands]
+
+================================================================================
+CONFIGURATION
+================================================================================
+
+Set Default Editor (add to config.fish):
+    set -gx EDITOR nvim          # Neovim
+    set -gx EDITOR vim           # Vim
+    set -gx EDITOR nano          # Nano
+    set -gx EDITOR "code --wait" # VS Code
+
+macOS Terminal.app - Enable Alt Key:
+    Preferences → Profiles → Keyboard → "Use Option as Meta key"
+
+iTerm2 - Enable Alt Key:
+    Preferences → Profiles → Keys → "Left/Right Option Key: Esc+"
+
+================================================================================
+FILES CREATED
+================================================================================
+
+1. /Users/davidsamuel.nechifor/.config/fish/conf.d/05-keybindings.fish
+   → Main keybindings configuration file
+   → Auto-loaded on fish startup
+   → Contains all custom keybindings and helper functions
+
+2. /Users/davidsamuel.nechifor/.config/fish/KEYBINDINGS.md
+   → Comprehensive documentation
+   → Usage examples and troubleshooting
+   → Advanced customization guide
+
+3. /Users/davidsamuel.nechifor/.config/fish/KEYBINDINGS-SUMMARY.txt
+   → Quick reference card (this file)
+   → Print-friendly format
+
+4. /Users/davidsamuel.nechifor/.config/fish/test-keybindings.fish
+   → Test script to verify keybindings
+   → Run with: fish test-keybindings.fish
+
+================================================================================
+TESTING YOUR KEYBINDINGS
+================================================================================
+
+1. Open a NEW fish shell (to load the new configuration)
+
+2. Test individual keybindings:
+   - Type: echo test
+   - Press Alt+S → Should become: sudo echo test
+   - Press Alt+S again → Back to: echo test
+
+3. Test editor integration:
+   - Type a long command
+   - Press Alt+E → Should open in your $EDITOR
+
+4. List all current keybindings:
+   - Run: bind
+
+5. Test clipboard (macOS):
+   - Type: echo hello
+   - Press Ctrl+X Ctrl+C → Should see "Command copied to clipboard"
+
+================================================================================
+CONSTRAINTS FOLLOWED
+================================================================================
+
+✓ Does NOT override critical system keybindings
+  - Ctrl+C (SIGINT) preserved
+  - Ctrl+D (EOF) preserved
+  - Ctrl+Z (SIGTSTP) preserved
+
+✓ Vim mode is OPTIONAL and disabled by default
+  - Set FISH_VIM_MODE=1 to enable
+  - Won't interfere with emacs-style bindings
+
+✓ macOS clipboard integration included
+  - pbcopy/pbpaste for macOS
+  - Graceful degradation on other platforms
+
+✓ All keybindings are documented
+  - Inline comments in code
+  - Separate documentation file
+  - Quick reference card
+
+================================================================================
+NEXT STEPS
+================================================================================
+
+1. Open a new fish shell to load the keybindings
+2. Try Alt+S on a command to test sudo toggle
+3. Try Alt+E to test editor integration
+4. Read KEYBINDINGS.md for full documentation
+5. Customize keybindings in 05-keybindings.fish if needed
+
+================================================================================

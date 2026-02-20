@@ -1,0 +1,15 @@
+# Example .nvmrc file
+# Place this in your project root as ".nvmrc"
+# The version will be automatically detected and used when you cd into the directory
+
+# Specify exact version
+20.11.0
+
+# Or use version prefix (will match latest 20.x.x)
+# 20
+
+# Or use LTS version name
+# lts/iron
+
+# Or use latest
+# latest

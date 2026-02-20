@@ -1,0 +1,17 @@
+# Fish Shell Session Template: nodejs
+# Description: Node.js development environment
+# Created: 2026-02-19
+
+# Environment Variables
+set -gx NODE_ENV 'development'
+set -gx DEBUG '*'
+
+# Startup Commands
+set -l startup_commands \
+    'echo "Node.js Session Initialized"' \
+    'node --version' \
+    'npm --version'
+
+# Custom initialization
+# Uncomment to auto-install dependencies
+# set -a startup_commands 'npm install'

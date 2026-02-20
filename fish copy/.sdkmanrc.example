@@ -1,0 +1,17 @@
+# Example .sdkmanrc file
+# Place this in your project root as ".sdkmanrc"
+# Run "sdk_use_auto" to switch to these versions
+
+# Java version
+java=21.0.1
+
+# Maven version
+maven=3.9.6
+
+# Gradle version
+gradle=8.5
+
+# You can add other SDKMAN candidates too:
+# kotlin=1.9.22
+# groovy=4.0.18
+# scala=3.3.1
