@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/NsdHSO/settingns/compare/v1.3.0...v1.4.0) (2026-02-20)
+
+
+### Features
+
+* 🎸 tried push ([77e4c75](https://github.com/NsdHSO/settingns/commit/77e4c751948eeb6c3c54db7f8ec7aeae1bcedef7))
+
 # [1.3.0](https://github.com/NsdHSO/settingns/compare/v1.2.0...v1.3.0) (2025-09-08)
 
 
