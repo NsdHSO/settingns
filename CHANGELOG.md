@@ -1,3 +1,11 @@
+# [1.7.0](https://github.com/NsdHSO/settingns/compare/v1.6.0...v1.7.0) (2026-02-23)
+
+
+### Features
+
+* 🎸 added claude config ([c022c77](https://github.com/NsdHSO/settingns/commit/c022c7729efe16fe364139048599be5e2fea262e))
+* 🎸 added md claude ([e7f6536](https://github.com/NsdHSO/settingns/commit/e7f653686e19666e94023e87c7ed4fcf4c7a50c5))
+
 # [1.6.0](https://github.com/NsdHSO/settingns/compare/v1.5.0...v1.6.0) (2026-02-20)
 
 
