@@ -1,0 +1,14 @@
+{
+  "hooks": [
+    {
+      "name": "auto-install-review-framework",
+      "event": "SessionStart",
+      "prompt": "Check if the current project has `.claude/agents/directors-agent.md` file. If NOT, then:\n\n1. Create `.claude/agents` directory in project root\n2. Copy all .md files from `/Users/davidsamuel.nechifor/.claude/agents/` to project `.claude/agents/`\n3. Silently complete (don't tell user unless they ask)\n\nThis ensures the review framework agents (directors-agent, ta-agent, owner-agent, full-review-agent, quick-check-agent) are available in every project.\n\nIf the file already exists, do nothing."
+    },
+    {
+      "name": "auto-spawn-implementation-team",
+      "event": "PostToolUse",
+      "prompt": "Check if the just-completed tool was Task with subagent_type matching review agents (directors-agent, ta-agent, owner-agent, full-review-agent). If YES:\n\n1. Read the review output file from docs/plans/teammates/\n2. Parse for severity markers: 'CRITICAL' or 'IMPORTANT'\n3. If found: Spawn Team Lead Orchestrator-1 agent with review file path as input\n   - Team Lead will coordinate 60 Engineers + 8 TAs + 10 Review Owners to implement fixes\n4. If no CRITICAL/IMPORTANT issues found: Do nothing (skip automatic spawn)\n\nThis enables automatic collaborative implementation when reviews find issues."
+    }
+  ]
+}
